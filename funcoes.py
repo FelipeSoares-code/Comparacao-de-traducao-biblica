@@ -3,6 +3,16 @@ def returnTxtBiblico(biblia, livro = None, abrev = None, cap = None, vers = None
     #"abbrev"[], "chapters"[[...]], "name"[]
     #como pegar um versiculo: livro[chapters][capitulo - 1][versiculo - 1]
     Livro = None
+    if cap == 0:
+        cap = None
+    else: 
+        cap = cap - 1 if cap > 0 else cap
+
+    if vers == 0: 
+        vers = None
+    else:
+        vers = vers - 1 if vers > 0 else vers
+    
     
     if livro is not None:
         livro = livro.lower()
@@ -25,12 +35,12 @@ def returnTxtBiblico(biblia, livro = None, abrev = None, cap = None, vers = None
         return None
     
     if vers == None:
-        return Livro["chapters"][cap - 1]
+        return Livro["chapters"][cap]
     
-    if vers > len(Livro["chapters"][cap - 1]):
+    if vers > len(Livro["chapters"][cap]):
         return None
     
-    return Livro["chapters"][cap - 1][vers - 1]
+    return Livro["chapters"][cap][vers]
     
     
     
