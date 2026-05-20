@@ -1,14 +1,14 @@
-def returnTxtBiblico(biblia, livro = None, abrev = None, cap = None, vers = None):
+def buscarTxtBiblico(biblia, livro = None, abrev = None, cap = None, vers = None):
     #estrutura do json:
     #"abbrev"[], "chapters"[[...]], "name"[]
     #como pegar um versiculo: livro[chapters][capitulo - 1][versiculo - 1]
     Livro = None
-    if cap == 0:
+    if cap in (0, None):
         cap = None
     else: 
         cap = cap - 1 if cap > 0 else cap
 
-    if vers == 0: 
+    if vers in (0, None): 
         vers = None
     else:
         vers = vers - 1 if vers > 0 else vers
