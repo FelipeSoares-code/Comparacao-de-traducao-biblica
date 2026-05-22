@@ -1,3 +1,5 @@
+import re, spacy
+
 def buscarTxtBiblico(biblia, livro = None, abrev = None, cap = None, vers = None):
     #estrutura do json:
     #"abbrev"[], "chapters"[[...]], "name"[]
@@ -43,4 +45,21 @@ def buscarTxtBiblico(biblia, livro = None, abrev = None, cap = None, vers = None
     return Livro["chapters"][cap][vers]
     
     
-    
+def limparLivro(livro):
+    #estrutura de busca de versículo: João 3:16 -> joaoArcLimpo[(3, 16)]
+    livroLimpo = {}
+    for i, cap in enumerate(livro["chapters"], start=1):
+        for j, vers in enumerate(cap, start=1):
+            textoLimpo = re.sub(r'[^\w\s]', '', vers.lower())
+            livroLimpo[(i, j)] = textoLimpo
+
+    return livroLimpo
+
+def tokenizarLivro(livroLimpo):
+    tokens = {}
+    for v in livroLimpo:
+        nlp = spacy.load("pt_core_news_lg")
+        texto = v
+        doc = nlp(texto)
+        tokens = [token.text for token in doc]
+
