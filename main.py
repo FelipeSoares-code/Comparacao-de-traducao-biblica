@@ -1,10 +1,12 @@
 import json
 from collections import Counter
-from funcoes import buscarTxtBiblico, limparLivro, tokenizarLivro, contarPalavras
+from funcoes import buscarJsonBiblia, organizarLivro, addTokens, contarPalavras
 
+print("inicio")
 
 #----------------------------------
 # Abertura do texto original em json
+print("Abrindo arquivos json...")
 with open('traducoes/ARC.json', 'r', encoding='utf-8') as arquivo:
     bibliaArc = json.load(arquivo)
 
@@ -13,29 +15,33 @@ with open('traducoes/NVT.json', 'r', encoding='utf-8') as arquivo:
 
 #-----------------------------------
 # escolha dos livros
-joaoArc = buscarTxtBiblico(
+joaoArc = buscarJsonBiblia(
     biblia=bibliaArc,
     abrev="Jo"
 )
 
-joaoNvt = buscarTxtBiblico(
+joaoNvt = buscarJsonBiblia(
     biblia=bibliaNvt,
     abrev="jo"
 )
 
 #-----------------------------------
-# Limpeaza das palavras
-joaoArcLimpo = limparLivro(joaoArc)
-joaoNvtLimpo = limparLivro(joaoNvt)
-
+# Limpeza das palavras e organização dos objetos
+print("Organizando livro...")
+joaoArc = organizarLivro(joaoArc, "Arc")
+joaoNvt = organizarLivro(joaoNvt, "Nvt")
 
 #-----------------------------------
 #tokenização
-joaoArcTokens = tokenizarLivro(joaoArcLimpo)
-joaoNvtTokens = tokenizarLivro(joaoNvtLimpo)
+print("Separando palavras...")
+addTokens(joaoArc)
+addTokens(joaoNvt)
 
 #----------------------------------
 #contagem de palavras
-totalPalavrasArc = contarPalavras(joaoArcTokens)
-totalPalavrasNvt = contarPalavras(joaoNvtTokens)
+print("Contando palavras...")
+totalPalavrasArc = contarPalavras(joaoArc)
+totalPalavrasNvt = contarPalavras(joaoNvt)
+
+
 

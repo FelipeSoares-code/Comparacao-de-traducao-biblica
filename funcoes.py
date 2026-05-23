@@ -1,7 +1,7 @@
 import re, spacy
 from collections import Counter
 
-def buscarTxtBiblico(biblia, livro = None, abrev = None, cap = None, vers = None):
+def buscarJsonBiblia(biblia, livro = None, abrev = None, cap = None, vers = None):
     #estrutura do json:
     #"abbrev"[], "chapters"[[...]], "name"[]
     #como pegar um versiculo: livro[chapters][capitulo - 1][versiculo - 1]
@@ -46,33 +46,40 @@ def buscarTxtBiblico(biblia, livro = None, abrev = None, cap = None, vers = None
     return Livro["chapters"][cap][vers]
     
     
-def limparLivro(livro):
+def organizarLivro(livro, nomeTraducao):
     #estrutura de busca de versículo: João 3:16 -> joaoArcLimpo[(3, 16)]
-    livroLimpo = {}
+    livroLimpo = []
     for i, cap in enumerate(livro["chapters"], start=1):
         for j, vers in enumerate(cap, start=1):
-            textoLimpo = re.sub(r'[^\w\s]', '', vers.lower())
-            livroLimpo[(i, j)] = textoLimpo
+            versLimpo = {
+                "traducao": nomeTraducao.lower(),
+                "livro": livro["name"],
+                "capitulo": i,
+                "vers": j,
+                "texto": vers,
+                "texto_limpo": re.sub(r'[^\w\s]', '', vers.lower()),                
+            }
+            livroLimpo.append(versLimpo)
 
     return livroLimpo
 
-def tokenizarLivro(livroLimpo):
-    tokens = {}
-
+def addTokens(livroLimpo):
     nlp = spacy.load("pt_core_news_sm")
 
-    for chave, texto in livroLimpo.items():
-        doc = nlp(texto)
-        tokens[chave] = [
-            token.text for token in doc
-            if not token.is_stop and not token.is_punct #essa funções limpam artigos, preposições, conjunções, pronomes muito comuns
-        ]
+    for v in livroLimpo:
+        doc = nlp(v['texto_limpo'])
 
-    return tokens
+        v.update({
+            "tokens": [
+                token.text
+                for token in doc
+                if not token.is_stop and not token.is_punct #remove artigos, preposições etc
+            ]
+        })
 
-def contarPalavras(tokens):
+def contarPalavras(livro):
     contador = Counter()
-    for chave, t in tokens.items():
-        contador.update(t)
+    for l in livro:
+        contador.update(l['tokens'])
     return contador
 
