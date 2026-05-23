@@ -1,4 +1,5 @@
 import re, spacy
+from collections import Counter
 
 def buscarTxtBiblico(biblia, livro = None, abrev = None, cap = None, vers = None):
     #estrutura do json:
@@ -69,6 +70,9 @@ def tokenizarLivro(livroLimpo):
 
     return tokens
 
-def contarPalavras():
-    ...
+def contarPalavras(tokens):
+    contador = Counter()
+    for chave, t in tokens.items():
+        contador.update(t)
+    return contador
 
