@@ -57,9 +57,18 @@ def limparLivro(livro):
 
 def tokenizarLivro(livroLimpo):
     tokens = {}
-    for v in livroLimpo:
-        nlp = spacy.load("pt_core_news_lg")
-        texto = v
+
+    nlp = spacy.load("pt_core_news_sm")
+
+    for chave, texto in livroLimpo.items():
         doc = nlp(texto)
-        tokens = [token.text for token in doc]
+        tokens[chave] = [
+            token.text for token in doc
+            if not token.is_stop and not token.is_punct #essa funções limpam artigos, preposições, conjunções, pronomes muito comuns
+        ]
+
+    return tokens
+
+def contarPalavras():
+    ...
 

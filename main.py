@@ -1,5 +1,5 @@
 import json
-from funcoes import buscarTxtBiblico, limparLivro
+from funcoes import buscarTxtBiblico, limparLivro, tokenizarLivro
 
 
 #----------------------------------
@@ -27,10 +27,18 @@ joaoNvt = buscarTxtBiblico(
 joaoArcLimpo = limparLivro(joaoArc)
 joaoNvtLimpo = limparLivro(joaoNvt)
 
-print(joaoArcLimpo["capitulo"][0])
-
 
 #-----------------------------------
 #tokenização
+joaoArcTokens = tokenizarLivro(joaoArcLimpo)
+joaoNvtTokens = tokenizarLivro(joaoNvtLimpo)
+
+print(joaoArcTokens[(1,1)])
+print(joaoNvtTokens[(1,1)])
+print(joaoArcLimpo[(1,1)])
+print(joaoNvtLimpo[(1,1)])
+
+#----------------------------------
+#contagem de palavras
 
 
