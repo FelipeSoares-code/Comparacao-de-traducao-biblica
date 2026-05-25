@@ -1,5 +1,6 @@
 import re, spacy
 from collections import Counter
+from gensim.models import FastText
 
 def buscarJsonBiblia(biblia, livro = None, abrev = None, cap = None, vers = None):
     #estrutura do json:
@@ -77,9 +78,17 @@ def addTokens(livroLimpo):
             ]
         })
 
-def contarPalavras(livro):
+def contPalavras(livro):
     contador = Counter()
     for l in livro:
         contador.update(l['tokens'])
     return contador
 
+def palavrSemelhantes(tokens):
+    modelo = FastText(
+        sentences=tokens,
+        vector_size=100,
+        window=5,
+        min_count=1
+    )
+    return modelo

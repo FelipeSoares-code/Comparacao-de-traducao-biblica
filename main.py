@@ -1,5 +1,5 @@
 import json
-from funcoes import buscarJsonBiblia, organizarLivro, addTokens, contarPalavras
+from funcoes import buscarJsonBiblia, organizarLivro, addTokens, contPalavras, palavrSemelhantes
 
 print("inicio")
 
@@ -39,15 +39,25 @@ addTokens(joaoNvt)
 #%%----------------------------------
 #contagem de palavras
 print("Contando palavras...")
-contPalvrArc = contarPalavras(joaoArc)
-contPalavrNvt = contarPalavras(joaoNvt)
+contPalvrArc = contPalavras(joaoArc)
+contPalavrNvt = contPalavras(joaoNvt)
 
 #%%-----------------------------------
 #detectar novas palavras
 palavrAntigas = set(contPalvrArc) - set(contPalavrNvt) #aparece na ARC e não na NVT
 palavrNovas = set(contPalavrNvt) - set(contPalvrArc) #aparece na NVT e não na ARC
 
+#%%------------------------------------
+#buscar semelhanças semânticas
+tokensTotal = []
+for v in joaoArc:
+    tokensTotal.append(v["tokens"])
+for v in joaoNvt:
+    tokensTotal.append(v["tokens"])
 
+semelhancas = palavrSemelhantes(tokensTotal)
+
+print(semelhancas.wv.most_similar("deus"))
 
 
 
