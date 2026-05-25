@@ -1,5 +1,4 @@
 import json
-from collections import Counter
 from funcoes import buscarJsonBiblia, organizarLivro, addTokens, contarPalavras
 
 print("inicio")
@@ -40,8 +39,15 @@ addTokens(joaoNvt)
 #%%----------------------------------
 #contagem de palavras
 print("Contando palavras...")
-totalPalavrasArc = contarPalavras(joaoArc)
-totalPalavrasNvt = contarPalavras(joaoNvt)
+contPalvrArc = contarPalavras(joaoArc)
+contPalavrNvt = contarPalavras(joaoNvt)
+
+#%%-----------------------------------
+#detectar novas palavras
+palavrAntigas = set(contPalvrArc) - set(contPalavrNvt) #aparece na ARC e não na NVT
+palavrNovas = set(contPalavrNvt) - set(contPalvrArc) #aparece na NVT e não na ARC
+
+
 
 
 
