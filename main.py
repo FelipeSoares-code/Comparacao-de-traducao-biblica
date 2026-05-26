@@ -1,5 +1,5 @@
 import json
-from funcoes import buscarJsonBiblia, organizarLivro, addTokens, contPalavras, palavrSemelhantes
+from funcoes import buscarJsonBiblia, organizarLivro, addTokens, contPalavras, palavrSemelhantes, semelhancaTraduc
 
 print("inicio")
 
@@ -35,6 +35,11 @@ joaoNvt = organizarLivro(joaoNvt, "Nvt")
 print("Separando palavras...")
 addTokens(joaoArc)
 addTokens(joaoNvt)
+tokensTotal = []
+for v in joaoArc:
+    tokensTotal.append(v["tokens"])
+for v in joaoNvt:
+    tokensTotal.append(v["tokens"])
 
 #%%----------------------------------
 #contagem de palavras
@@ -48,16 +53,14 @@ palavrAntigas = set(contPalvrArc) - set(contPalavrNvt) #aparece na ARC e não na
 palavrNovas = set(contPalavrNvt) - set(contPalvrArc) #aparece na NVT e não na ARC
 
 #%%------------------------------------
-#buscar semelhanças semânticas
-tokensTotal = []
-for v in joaoArc:
-    tokensTotal.append(v["tokens"])
-for v in joaoNvt:
-    tokensTotal.append(v["tokens"])
+#buscar semelhanças semânticas entre palavras
+palavrSemelhante = palavrSemelhantes(tokensTotal)
+palavrSemelhante.wv.most_similar('deus')
 
-semelhancas = palavrSemelhantes(tokensTotal)
-
-print(semelhancas.wv.most_similar("deus"))
+#%%-------------------------------------
+#buscar nível de semelhança entre versiculos
+semelhanVers = semelhancaTraduc(joaoArc, joaoNvt)
+print(semelhanVers)
 
 
 

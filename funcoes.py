@@ -1,6 +1,8 @@
 import re, spacy
 from collections import Counter
 from gensim.models import FastText
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
 
 def buscarJsonBiblia(biblia, livro = None, abrev = None, cap = None, vers = None):
     #estrutura do json:
@@ -92,3 +94,32 @@ def palavrSemelhantes(tokens):
         min_count=1
     )
     return modelo
+
+def semelhancaTraduc(traduc1, traduc2):
+    resultados = []
+    modelo = SentenceTransformer(
+        'paraphrase-multilingual-MiniLM-L12-v2'
+    )
+    #Gerar embeddings
+    for v1 in traduc1:
+        emb1 = modelo.encode(v1["texto_limpo"])
+        for v2 in traduc2:
+            if (
+                v2["capitulo"] == v1["capitulo"] and 
+                v2["vers"] == v1["vers"]
+            ):
+                emb2 = modelo.encode(v2["texto_limpo"])
+            break
+        
+        sim = cosine_similarity(
+            [emb1],
+            [emb2]
+        )[0][0]
+
+        resultados.append({
+            "capitulo": v1["capitulo"],
+            "versiculo": v2["vers"],
+            "similaridade": float(sim)
+        })
+
+    return resultados
