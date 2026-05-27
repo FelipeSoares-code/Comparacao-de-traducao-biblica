@@ -16,12 +16,12 @@ with open('traducoes/NVT.json', 'r', encoding='utf-8') as arquivo:
 # escolha dos livros
 livroArc = buscarJsonBiblia(
     biblia=bibliaArc,
-    abrev='Jn'
+    abrev='Sl'
 )
 
 livroNvt = buscarJsonBiblia(
     biblia=bibliaNvt,
-    abrev='Jn'
+    abrev='Sl'
 )
 
 #%%-----------------------------------
@@ -55,12 +55,10 @@ palavrNovas = set(contPalavrNvt) - set(contPalvrArc) #aparece na NVT e não na A
 #%%------------------------------------
 #buscar semelhanças semânticas entre palavras
 palavrSemelhante = palavrSemelhantes(tokensTotal)
-palavrSemelhante.wv.most_similar('deus')
 
 #%%-------------------------------------
 #buscar nível de semelhança entre versiculos
 semelhanVers = semelhancaTraduc(livroArc, livroNvt)
-print(semelhanVers)
 
 
 

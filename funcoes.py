@@ -57,6 +57,7 @@ def organizarLivro(livro, nomeTraducao):
             if isinstance(vers, list): #para caso o versiculo seja uma list
                 vers = " ".join(vers)
             versLimpo = {
+                "id": f'{livro} {i}:{j}',
                 "traducao": nomeTraducao.lower(),
                 "livro": livro["name"],
                 "capitulo": i,

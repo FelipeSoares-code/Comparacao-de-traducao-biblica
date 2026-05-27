@@ -1,0 +1,5 @@
+quais dashbords eu quero:
+    - similaridade entre traduções a partir de histograma ou por evolução entre os capitulos/versiculos/livros
+    - comparação da quantidade média de palavras por versiculos entre as duas traduções
+    - palavras antigas que mais se repetem na tradução antiga
+    - palavras novas que mais se repetem na tradução nova
