@@ -54,6 +54,8 @@ def organizarLivro(livro, nomeTraducao):
     livroLimpo = []
     for i, cap in enumerate(livro["chapters"], start=1):
         for j, vers in enumerate(cap, start=1):
+            if isinstance(vers, list): #para caso o versiculo seja uma list
+                vers = " ".join(vers)
             versLimpo = {
                 "traducao": nomeTraducao.lower(),
                 "livro": livro["name"],
@@ -97,29 +99,36 @@ def palavrSemelhantes(tokens):
 
 def semelhancaTraduc(traduc1, traduc2):
     resultados = []
+
     modelo = SentenceTransformer(
         'paraphrase-multilingual-MiniLM-L12-v2'
     )
-    #Gerar embeddings
-    for v1 in traduc1:
-        emb1 = modelo.encode(v1["texto_limpo"])
-        for v2 in traduc2:
-            if (
-                v2["capitulo"] == v1["capitulo"] and 
-                v2["vers"] == v1["vers"]
-            ):
-                emb2 = modelo.encode(v2["texto_limpo"])
-            break
-        
-        sim = cosine_similarity(
-            [emb1],
-            [emb2]
-        )[0][0]
 
-        resultados.append({
-            "capitulo": v1["capitulo"],
-            "versiculo": v2["vers"],
-            "similaridade": float(sim)
-        })
+    emb_traduc2 = {}
+
+    for v2 in traduc2:
+        chave = (v2["capitulo"], v2["vers"])
+
+        emb_traduc2[chave] = modelo.encode(
+            v2["texto_limpo"]
+        )
+
+    for v1 in traduc1:
+        chave = (v1["capitulo"], v1["vers"])
+
+        if chave in emb_traduc2:
+            emb1 = modelo.encode(v1["texto_limpo"])
+            emb2 = emb_traduc2[chave]
+
+            sim = cosine_similarity(
+                [emb1],
+                [emb2]
+            )[0][0]
+
+            resultados.append({
+                "capitulo": v1["capitulo"],
+                "versiculo": v1["vers"],
+                "similaridade": float(sim)
+            })
 
     return resultados

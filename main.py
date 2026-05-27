@@ -14,38 +14,38 @@ with open('traducoes/NVT.json', 'r', encoding='utf-8') as arquivo:
 
 #%%-----------------------------------
 # escolha dos livros
-joaoArc = buscarJsonBiblia(
+livroArc = buscarJsonBiblia(
     biblia=bibliaArc,
-    abrev="Jo"
+    abrev='Jn'
 )
 
-joaoNvt = buscarJsonBiblia(
+livroNvt = buscarJsonBiblia(
     biblia=bibliaNvt,
-    abrev="jo"
+    abrev='Jn'
 )
 
 #%%-----------------------------------
 # Limpeza das palavras e organização dos objetos
 print("Organizando livro...")
-joaoArc = organizarLivro(joaoArc, "Arc")
-joaoNvt = organizarLivro(joaoNvt, "Nvt")
+livroArc = organizarLivro(livroArc, "Arc")
+livroNvt = organizarLivro(livroNvt, "Nvt")
 
 #%%-----------------------------------
 #tokenização
 print("Separando palavras...")
-addTokens(joaoArc)
-addTokens(joaoNvt)
+addTokens(livroArc)
+addTokens(livroNvt)
 tokensTotal = []
-for v in joaoArc:
+for v in livroArc:
     tokensTotal.append(v["tokens"])
-for v in joaoNvt:
+for v in livroNvt:
     tokensTotal.append(v["tokens"])
 
 #%%----------------------------------
 #contagem de palavras
 print("Contando palavras...")
-contPalvrArc = contPalavras(joaoArc)
-contPalavrNvt = contPalavras(joaoNvt)
+contPalvrArc = contPalavras(livroArc)
+contPalavrNvt = contPalavras(livroNvt)
 
 #%%-----------------------------------
 #detectar novas palavras
@@ -59,7 +59,7 @@ palavrSemelhante.wv.most_similar('deus')
 
 #%%-------------------------------------
 #buscar nível de semelhança entre versiculos
-semelhanVers = semelhancaTraduc(joaoArc, joaoNvt)
+semelhanVers = semelhancaTraduc(livroArc, livroNvt)
 print(semelhanVers)
 
 
