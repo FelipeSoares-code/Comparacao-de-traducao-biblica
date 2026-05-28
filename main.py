@@ -1,5 +1,6 @@
 import json
-from funcoes import buscarJsonBiblia, organizarLivro, addTokens, contPalavras, palavrSemelhantes, semelhancaTraduc
+import funcoes as fn
+import funcoesGraficos as fg
 
 print("inicio")
 
@@ -14,27 +15,27 @@ with open('traducoes/NVT.json', 'r', encoding='utf-8') as arquivo:
 
 #%%-----------------------------------
 # escolha dos livros
-livroArc = buscarJsonBiblia(
+livroArc = fn.buscarJsonBiblia(
     biblia=bibliaArc,
-    abrev='Sl'
+    abrev='jo'
 )
 
-livroNvt = buscarJsonBiblia(
+livroNvt = fn.buscarJsonBiblia(
     biblia=bibliaNvt,
-    abrev='Sl'
+    abrev='jo'
 )
 
 #%%-----------------------------------
 # Limpeza das palavras e organização dos objetos
 print("Organizando livro...")
-livroArc = organizarLivro(livroArc, "Arc")
-livroNvt = organizarLivro(livroNvt, "Nvt")
+livroArc = fn.organizarLivro(livroArc, "Arc")
+livroNvt = fn.organizarLivro(livroNvt, "Nvt")
 
 #%%-----------------------------------
 #tokenização
 print("Separando palavras...")
-addTokens(livroArc)
-addTokens(livroNvt)
+fn.addTokens(livroArc)
+fn.addTokens(livroNvt)
 tokensTotal = []
 for v in livroArc:
     tokensTotal.append(v["tokens"])
@@ -44,8 +45,8 @@ for v in livroNvt:
 #%%----------------------------------
 #contagem de palavras
 print("Contando palavras...")
-contPalvrArc = contPalavras(livroArc)
-contPalavrNvt = contPalavras(livroNvt)
+contPalvrArc = fn.contPalavras(livroArc)
+contPalavrNvt = fn.contPalavras(livroNvt)
 
 #%%-----------------------------------
 #detectar novas palavras
@@ -54,11 +55,12 @@ palavrNovas = set(contPalavrNvt) - set(contPalvrArc) #aparece na NVT e não na A
 
 #%%------------------------------------
 #buscar semelhanças semânticas entre palavras
-palavrSemelhante = palavrSemelhantes(tokensTotal)
+palavrSemelhante = fn.palavrSemelhantes(tokensTotal)
 
 #%%-------------------------------------
 #buscar nível de semelhança entre versiculos
-semelhanVers = semelhancaTraduc(livroArc, livroNvt)
+semelhanVers = fn.semelhancaTraduc(livroArc, livroNvt)
 
+histograma = fg.criarHistograma(semelhanVers)
 
 
