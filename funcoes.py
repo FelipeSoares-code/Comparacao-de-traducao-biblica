@@ -69,10 +69,10 @@ def organizarLivro(livro, nomeTraducao):
 
     return livroLimpo
 
-def addTokens(livroLimpo):
+def addTokens(livro):
     nlp = spacy.load("pt_core_news_sm")
 
-    for v in livroLimpo:
+    for v in livro:
         doc = nlp(v['texto_limpo'])
 
         v.update({
@@ -133,3 +133,10 @@ def semelhancaTraduc(traduc1, traduc2):
             })
 
     return resultados
+
+def addQuantPalavr(livro):
+    for v in livro:
+        quant = len(v["tokens"])
+        v.update({
+            "quant_palavras": quant
+        })

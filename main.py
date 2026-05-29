@@ -42,6 +42,9 @@ for v in livroArc:
 for v in livroNvt:
     tokensTotal.append(v["tokens"])
 
+fn.addQuantPalavr(livroArc)
+fn.addQuantPalavr(livroNvt)
+
 #%%----------------------------------
 #contagem de palavras
 print("Contando palavras...")
@@ -61,6 +64,12 @@ palavrSemelhante = fn.palavrSemelhantes(tokensTotal)
 #buscar nível de semelhança entre versiculos
 semelhanVers = fn.semelhancaTraduc(livroArc, livroNvt)
 
-histograma = fg.criarHistograma(semelhanVers)
+fg.criarHistograma(semelhanVers)
+
+#%%-------------------------------------
+#comparar quantidade média de palavras por versiculo no capítulo
+fg.criarGrafLinhas(livroArc, livroNvt)
+
+
 
 
