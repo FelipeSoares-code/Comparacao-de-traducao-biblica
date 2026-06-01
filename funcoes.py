@@ -60,6 +60,7 @@ def organizarLivro(livro, nomeTraducao):
                 "id": f'{livro} {i}:{j}',
                 "traducao": nomeTraducao.lower(),
                 "livro": livro["name"],
+                "abrev": livro["abbrev"],
                 "capitulo": i,
                 "vers": j,
                 "texto": vers,
@@ -140,3 +141,22 @@ def addQuantPalavr(livro):
         v.update({
             "quant_palavras": quant
         })
+
+def calcMediaCap(livro): 
+    medias = []
+    capAtual = livro[0]["capitulo"]
+    soma = 0
+    quantV = 0
+    for v in livro:
+        if capAtual == v["capitulo"]:
+            soma += v["quant_palavras"]
+            quantV += 1
+        else:
+            medias.append(soma / quantV)
+            capAtual = v["capitulo"]
+            soma = v["quant_palavras"] #reinicia pelo primeiro vers
+            quantV = 1
+
+    # adiciona último capítulo
+    medias.append(soma / quantV)
+    return medias

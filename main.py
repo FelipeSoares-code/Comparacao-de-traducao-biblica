@@ -17,12 +17,12 @@ with open('traducoes/NVT.json', 'r', encoding='utf-8') as arquivo:
 # escolha dos livros
 livroArc = fn.buscarJsonBiblia(
     biblia=bibliaArc,
-    abrev='jo'
+    abrev='sl'
 )
 
 livroNvt = fn.buscarJsonBiblia(
     biblia=bibliaNvt,
-    abrev='jo'
+    abrev='sl'
 )
 
 #%%-----------------------------------
@@ -58,13 +58,19 @@ palavrNovas = set(contPalavrNvt) - set(contPalvrArc) #aparece na NVT e não na A
 
 #%%------------------------------------
 #buscar semelhanças semânticas entre palavras
-palavrSemelhante = fn.palavrSemelhantes(tokensTotal)
+# palavrSemelhante = fn.palavrSemelhantes(tokensTotal)
 
 #%%-------------------------------------
 #buscar nível de semelhança entre versiculos
 semelhanVers = fn.semelhancaTraduc(livroArc, livroNvt)
 
-fg.criarHistograma(semelhanVers)
+fg.criarHistograma(
+    semelhanVers,
+    traducName1=livroArc[0]["traducao"],
+    traducNome2=livroNvt[0]["traducao"],
+    abrevLivro=livroArc[0]["abrev"],
+    nomeLivro=livroArc[0]["livro"]
+)
 
 #%%-------------------------------------
 #comparar quantidade média de palavras por versiculo no capítulo
