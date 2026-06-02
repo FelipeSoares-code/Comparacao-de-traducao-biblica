@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import funcoes as fn
 import numpy as np
+import pandas as pd
 
 
 def criarHistograma(lista, traducName1 = None, traducNome2 = None, abrevLivro = None, nomeLivro = None):
@@ -70,3 +71,31 @@ def criarGrafLinhas(livro1, livro2):
     plt.show()
 
     return plt
+
+def criarHeatmap(lista, traducName1 = None, traducNome2 = None, abrevLivro = None, nomeLivro = None):
+    df = pd.DataFrame(lista)
+
+    matriz = df.pivot(
+        index="versiculo",
+        columns="capitulo",
+        values="similaridade"
+    )
+
+    plt.figure(figsize=(12,8))
+    sns.heatmap(
+        matriz,
+        cmap="YlOrRd",
+        linewidths=0.2
+    )
+
+    titulo = \
+        f"Divergência Entre {traducName1.upper()} e {traducNome2.upper()} - Livro: {nomeLivro}" \
+        if (None not in (traducName1, traducNome2, nomeLivro)) \
+        else "Divergência Entre as Traduções"
+    
+    nomeFig = f"heatmap_{traducName1}_{traducNome2}_{abrevLivro}.png" if None not in (traducName1, traducNome2, abrevLivro) else "heatmap.png"
+    plt.title(titulo)
+    plt.xlabel("Capítulo")
+    plt.ylabel("Versículo")
+    plt.savefig(nomeFig)
+    plt.show()

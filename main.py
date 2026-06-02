@@ -17,12 +17,12 @@ with open('traducoes/NVT.json', 'r', encoding='utf-8') as arquivo:
 # escolha dos livros
 livroArc = fn.buscarJsonBiblia(
     biblia=bibliaArc,
-    abrev='sl'
+    abrev='gn'
 )
 
 livroNvt = fn.buscarJsonBiblia(
     biblia=bibliaNvt,
-    abrev='sl'
+    abrev='gn'
 )
 
 #%%-----------------------------------
@@ -75,6 +75,14 @@ fg.criarHistograma(
 #%%-------------------------------------
 #comparar quantidade média de palavras por versiculo no capítulo
 fg.criarGrafLinhas(livroArc, livroNvt)
+
+fg.criarHeatmap(
+    lista=semelhanVers,
+    traducName1=livroArc[0]["traducao"],
+    traducNome2=livroNvt[0]["traducao"],
+    abrevLivro=livroArc[0]["abrev"],
+    nomeLivro=livroArc[0]["livro"]
+)
 
 
 
