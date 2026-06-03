@@ -43,8 +43,17 @@ def criarHistograma(lista, traducName1 = None, traducNome2 = None, abrevLivro = 
     return plt
 
 def criarGrafLinhas(livro1, livro2):
-    list1 = fn.calcMediaCap(livro1)
-    list2 = fn.calcMediaCap(livro2)    
+    if len(livro1) <= 100:
+        list1 = [v["quant_palavras"] for v in livro1]
+        list2 = [v["quant_palavras"] for v in livro2]
+        eixoX = range(1, len(list1) + 1)
+        xlabel = "Versículo"
+    else:
+        # mostra média por capítulo
+        list1 = fn.calcMediaCap(livro1)
+        list2 = fn.calcMediaCap(livro2)
+        eixoX = range(1, len(list1) + 1)
+        xlabel = "Capítulo"
 
     plt.figure(figsize=(14,6))
 
@@ -53,14 +62,14 @@ def criarGrafLinhas(livro1, livro2):
     nomeTraduc2 = livro2[0]["traducao"].upper()
     abrev = livro1[0]["abrev"]
 
-    plt.plot(lenCapitulos, list1, label=nomeTraduc1)
-    plt.plot(lenCapitulos, list2, label=nomeTraduc2)
+    plt.plot(eixoX, list1, label=nomeTraduc1)
+    plt.plot(eixoX, list2, label=nomeTraduc2)
 
     # plt.xticks(lenCapitulos) #marca quais devem ser as marcações em no eixo x
     plt.grid(axis="y", alpha=0.3)
 
     plt.title(f"Quantidade Média de Palavras por Versiculo - Livro: {livro1[0]['livro']}")
-    plt.xlabel("Capítulo")
+    plt.xlabel(xlabel)
     plt.ylabel("Quantidade de Palavras")
 
     plt.legend()

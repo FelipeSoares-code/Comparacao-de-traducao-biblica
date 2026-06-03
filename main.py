@@ -17,12 +17,12 @@ with open('traducoes/NVT.json', 'r', encoding='utf-8') as arquivo:
 # escolha dos livros
 livroArc = fn.buscarJsonBiblia(
     biblia=bibliaArc,
-    abrev='jo'
+    abrev='cl'
 )
 
 livroNvt = fn.buscarJsonBiblia(
     biblia=bibliaNvt,
-    abrev='jo'
+    abrev='cl'
 )
 
 #%%-----------------------------------
