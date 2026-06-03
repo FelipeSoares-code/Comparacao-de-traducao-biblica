@@ -17,12 +17,12 @@ with open('traducoes/NVT.json', 'r', encoding='utf-8') as arquivo:
 # escolha dos livros
 livroArc = fn.buscarJsonBiblia(
     biblia=bibliaArc,
-    abrev='gn'
+    abrev='jo'
 )
 
 livroNvt = fn.buscarJsonBiblia(
     biblia=bibliaNvt,
-    abrev='gn'
+    abrev='jo'
 )
 
 #%%-----------------------------------
@@ -83,6 +83,8 @@ fg.criarHeatmap(
     abrevLivro=livroArc[0]["abrev"],
     nomeLivro=livroArc[0]["livro"]
 )
+
+print(fn.topSemelhanPorCap(semelhanVers, 3))
 
 
 

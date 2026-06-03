@@ -93,9 +93,13 @@ def criarHeatmap(lista, traducName1 = None, traducNome2 = None, abrevLivro = Non
         if (None not in (traducName1, traducNome2, nomeLivro)) \
         else "Divergência Entre as Traduções"
     
-    nomeFig = f"heatmap_{traducName1}_{traducNome2}_{abrevLivro}.png" if None not in (traducName1, traducNome2, abrevLivro) else "heatmap.png"
+    nomeFig = f"heatmap_{traducName1}_{traducNome2}_{abrevLivro}.png" \
+        if None not in (traducName1, traducNome2, abrevLivro) else "heatmap.png"
+    
     plt.title(titulo)
     plt.xlabel("Capítulo")
     plt.ylabel("Versículo")
     plt.savefig(nomeFig)
     plt.show()
+
+    return plt

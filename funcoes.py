@@ -3,6 +3,7 @@ from collections import Counter
 from gensim.models import FastText
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
+import pandas as pd
 
 def buscarJsonBiblia(biblia, livro = None, abrev = None, cap = None, vers = None):
     #estrutura do json:
@@ -160,3 +161,15 @@ def calcMediaCap(livro):
     # adiciona último capítulo
     medias.append(soma / quantV)
     return medias
+
+def topSemelhanPorCap(lista, quantPorCap):
+    df = pd.DataFrame(lista)
+
+    topPorCap = (
+        df.sort_values("similaridade")
+          .groupby("capitulo")
+          .head(quantPorCap)
+          .reset_index(drop=True)
+    )
+
+    return topPorCap
