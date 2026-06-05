@@ -20,7 +20,6 @@ def buscarJsonBiblia(biblia, livro = None, abrev = None, cap = None, vers = None
     else:
         vers = vers - 1 if vers > 0 else vers
     
-    
     if livro is not None:
         livro = livro.lower()
 
@@ -62,7 +61,7 @@ def organizarLivro(livro, nomeTraducao):
                 "traducao": nomeTraducao.lower(),
                 "livro": livro["name"],
                 "abrev": livro["abbrev"],
-                "capitulo": i,
+                "cap": i,
                 "vers": j,
                 "texto": vers,
                 "texto_limpo": re.sub(r'[^\w\s]', '', vers.lower()),                
@@ -100,7 +99,7 @@ def palavrSemelhantes(tokens):
     )
     return modelo
 
-def semelhancaTraduc(traduc1, traduc2):
+def semelhanTraduc(traduc1, traduc2):
     resultados = []
 
     modelo = SentenceTransformer(
@@ -110,14 +109,14 @@ def semelhancaTraduc(traduc1, traduc2):
     emb_traduc2 = {}
 
     for v2 in traduc2:
-        chave = (v2["capitulo"], v2["vers"])
+        chave = (v2["cap"], v2["vers"])
 
         emb_traduc2[chave] = modelo.encode(
             v2["texto_limpo"]
         )
 
     for v1 in traduc1:
-        chave = (v1["capitulo"], v1["vers"])
+        chave = (v1["cap"], v1["vers"])
 
         if chave in emb_traduc2:
             emb1 = modelo.encode(v1["texto_limpo"])
@@ -129,8 +128,8 @@ def semelhancaTraduc(traduc1, traduc2):
             )[0][0]
 
             resultados.append({
-                "capitulo": v1["capitulo"],
-                "versiculo": v1["vers"],
+                "cap": v1["cap"],
+                "vers": v1["vers"],
                 "similaridade": float(sim)
             })
 
@@ -145,16 +144,16 @@ def addQuantPalavr(livro):
 
 def calcMediaCap(livro): 
     medias = []
-    capAtual = livro[0]["capitulo"]
+    capAtual = livro[0]["cap"]
     soma = 0
     quantV = 0
     for v in livro:
-        if capAtual == v["capitulo"]:
+        if capAtual == v["cap"]:
             soma += v["quant_palavras"]
             quantV += 1
         else:
             medias.append(soma / quantV)
-            capAtual = v["capitulo"]
+            capAtual = v["cap"]
             soma = v["quant_palavras"] #reinicia pelo primeiro vers
             quantV = 1
 
@@ -167,9 +166,10 @@ def topSemelhanPorCap(lista, quantPorCap):
 
     topPorCap = (
         df.sort_values("similaridade")
-          .groupby("capitulo")
-          .head(quantPorCap)
-          .reset_index(drop=True)
+            .groupby("cap")
+            .head(quantPorCap)
+            .sort_values(["cap", "vers"])
+            .reset_index(drop=True)
     )
 
     return topPorCap

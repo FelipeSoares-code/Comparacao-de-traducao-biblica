@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 
 
-def criarHistograma(lista, traducName1 = None, traducNome2 = None, abrevLivro = None, nomeLivro = None):
+def histograma(lista, traducNome1 = None, traducNome2 = None, abrevLivro = None, nomeLivro = None):
     sim = []
     for l in lista:
         sim.append(l["similaridade"])
@@ -27,8 +27,8 @@ def criarHistograma(lista, traducName1 = None, traducNome2 = None, abrevLivro = 
     plt.legend()
 
     titulo = \
-        f"Distribuição de Similaridade Entre {traducName1.upper()} e {traducNome2.upper()} - Livro: {nomeLivro}" \
-        if (None not in (traducName1, traducNome2, nomeLivro)) \
+        f"Distribuição de Similaridade Entre {traducNome1.upper()} e {traducNome2.upper()} - Livro: {nomeLivro}" \
+        if (None not in (traducNome1, traducNome2, nomeLivro)) \
         else "Distribuição de Similaridade Entre as Traduções"
 
     plt.title(titulo)
@@ -36,13 +36,13 @@ def criarHistograma(lista, traducName1 = None, traducNome2 = None, abrevLivro = 
     plt.ylabel("Quantidade de Versículos")
 
     plt.tight_layout()
-    nomeFig = f"histograma_{traducName1}_{traducNome2}_{abrevLivro}.png" if None not in (traducName1, traducNome2, abrevLivro) else "histograma.png"
+    nomeFig = f"histograma_{traducNome1}_{traducNome2}_{abrevLivro}.png" if None not in (traducNome1, traducNome2, abrevLivro) else "histograma.png"
     plt.savefig(nomeFig)
     plt.show()
 
     return plt
 
-def criarGrafLinhas(livro1, livro2):
+def grafLinhas(livro1, livro2):
     if len(livro1) <= 100:
         list1 = [v["quant_palavras"] for v in livro1]
         list2 = [v["quant_palavras"] for v in livro2]
@@ -81,34 +81,77 @@ def criarGrafLinhas(livro1, livro2):
 
     return plt
 
-def criarHeatmap(lista, traducName1 = None, traducNome2 = None, abrevLivro = None, nomeLivro = None):
+def heatmap(lista, traducNome1 = None, traducNome2 = None, abrevLivro = None, nomeLivro = None):
     df = pd.DataFrame(lista)
 
     matriz = df.pivot(
-        index="versiculo",
-        columns="capitulo",
+        index="cap",
+        columns="vers",
         values="similaridade"
     )
 
-    plt.figure(figsize=(12,8))
-    sns.heatmap(
+    plt.figure(figsize=(20, 8))
+
+    plt.xticks(rotation=90)
+
+    ax = sns.heatmap(
         matriz,
-        cmap="YlOrRd",
-        linewidths=0.2
+        linewidths=0.2,
+        cmap="Greens",
+        cbar_kws={"label": "Similaridade"}
     )
 
+    
+
+    ax.set_xticks(ax.get_xticks()[::2])
+    ax.tick_params(axis='x', rotation=90)
+
     titulo = \
-        f"Divergência Entre {traducName1.upper()} e {traducNome2.upper()} - Livro: {nomeLivro}" \
-        if (None not in (traducName1, traducNome2, nomeLivro)) \
+        f"Divergência Entre {traducNome1.upper()} e {traducNome2.upper()} - Livro: {nomeLivro}" \
+        if (None not in (traducNome1, traducNome2, nomeLivro)) \
         else "Divergência Entre as Traduções"
     
-    nomeFig = f"heatmap_{traducName1}_{traducNome2}_{abrevLivro}.png" \
-        if None not in (traducName1, traducNome2, abrevLivro) else "heatmap.png"
+    nomeFig = f"heatmap_{traducNome1}_{traducNome2}_{abrevLivro}.png" \
+        if None not in (traducNome1, traducNome2, abrevLivro) else "heatmap.png"
     
     plt.title(titulo)
-    plt.xlabel("Capítulo")
-    plt.ylabel("Versículo")
+    plt.xlabel("Versículo")
+    plt.ylabel("Capítulo")
     plt.savefig(nomeFig)
     plt.show()
 
     return plt
+
+def grafTopSemelhanca(topPorCap, traducNome1 = None, traducNome2 = None, nomeLivro = None, abrevLivro = None):
+    topPorCap["ref"] = (
+        topPorCap["cap"].astype(str)
+        + ":"
+        + topPorCap["vers"].astype(str)
+    )
+
+    plt.figure(figsize=(15, 6))
+
+    sns.barplot(
+        data=topPorCap,
+        x="ref",
+        y="similaridade",
+        color="blue",
+        hue="similaridade"
+    )
+
+    plt.xticks(rotation=45)
+
+    titulo = \
+        f"Versículos Mais Divergentes Entre {traducNome1.upper()} e {traducNome2.upper()} Por Capítulo - Livro: {nomeLivro}" \
+        if (None not in (traducNome1, traducNome2, nomeLivro)) \
+        else "Versículos Mais Divergentes"
+
+    plt.title(titulo)
+    plt.ylabel("Similaridade")
+
+    nomeFig = f"semelhanPorCap{traducNome1}_{traducNome2}_{abrevLivro}.png" \
+        if None not in (traducNome1, traducNome2, abrevLivro) else "semelhanPorCap.png"
+
+    plt.tight_layout()
+    plt.savefig(nomeFig)
+    plt.show()
