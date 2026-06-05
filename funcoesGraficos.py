@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 
 
-def histograma(lista, traducNome1 = None, traducNome2 = None, abrevLivro = None, nomeLivro = None):
+def histograma(lista, traducNome1, traducNome2, abrevLivro, nomeLivro):
     sim = []
     for l in lista:
         sim.append(l["similaridade"])
@@ -26,18 +26,16 @@ def histograma(lista, traducNome1 = None, traducNome2 = None, abrevLivro = None,
     plt.grid(axis="y", alpha=0.3)
     plt.legend()
 
-    titulo = \
-        f"Distribuição de Similaridade Entre {traducNome1.upper()} e {traducNome2.upper()} - Livro: {nomeLivro}" \
-        if (None not in (traducNome1, traducNome2, nomeLivro)) \
-        else "Distribuição de Similaridade Entre as Traduções"
+    titulo = f"Distribuição de Similaridade Entre {traducNome1.upper()} e {traducNome2.upper()} - Livro: {nomeLivro}"
 
     plt.title(titulo)
     plt.xlabel("Similaridade")
     plt.ylabel("Quantidade de Versículos")
 
     plt.tight_layout()
-    nomeFig = f"histograma_{traducNome1}_{traducNome2}_{abrevLivro}.png" if None not in (traducNome1, traducNome2, abrevLivro) else "histograma.png"
-    plt.savefig(nomeFig)
+    nomeFig = f"histograma_{traducNome1}_{traducNome2}_{abrevLivro}.png"
+
+    plt.savefig("graficos/" + nomeFig)
     plt.show()
 
     return plt
@@ -75,13 +73,14 @@ def grafLinhas(livro1, livro2):
     plt.legend()
     plt.tight_layout()
     
-    nomeFig = f"linhas_{nomeTraduc1.lower()}_{nomeTraduc2.lower()}_{abrev}" if None not in (nomeTraduc1, nomeTraduc2, abrev) else "linhas.png"
-    plt.savefig(nomeFig)
+    nomeFig = f"linhas_{nomeTraduc1.lower()}_{nomeTraduc2.lower()}_{abrev}"
+
+    plt.savefig("graficos/" + nomeFig)
     plt.show()
 
     return plt
 
-def heatmap(lista, traducNome1 = None, traducNome2 = None, abrevLivro = None, nomeLivro = None):
+def heatmap(lista, traducNome1, traducNome2, abrevLivro, nomeLivro):
     df = pd.DataFrame(lista)
 
     matriz = df.pivot(
@@ -101,28 +100,22 @@ def heatmap(lista, traducNome1 = None, traducNome2 = None, abrevLivro = None, no
         cbar_kws={"label": "Similaridade"}
     )
 
-    
-
     ax.set_xticks(ax.get_xticks()[::2])
     ax.tick_params(axis='x', rotation=90)
 
-    titulo = \
-        f"Divergência Entre {traducNome1.upper()} e {traducNome2.upper()} - Livro: {nomeLivro}" \
-        if (None not in (traducNome1, traducNome2, nomeLivro)) \
-        else "Divergência Entre as Traduções"
+    titulo = f"Divergência Entre {traducNome1.upper()} e {traducNome2.upper()} - Livro: {nomeLivro}"
     
-    nomeFig = f"heatmap_{traducNome1}_{traducNome2}_{abrevLivro}.png" \
-        if None not in (traducNome1, traducNome2, abrevLivro) else "heatmap.png"
+    nomeFig = f"heatmap_{traducNome1}_{traducNome2}_{abrevLivro}.png"
     
     plt.title(titulo)
     plt.xlabel("Versículo")
     plt.ylabel("Capítulo")
-    plt.savefig(nomeFig)
+    plt.savefig("graficos/" + nomeFig)
     plt.show()
 
     return plt
 
-def grafTopSemelhanca(topPorCap, traducNome1 = None, traducNome2 = None, nomeLivro = None, abrevLivro = None):
+def grafTopSemelhanca(topPorCap, traducNome1, traducNome2, nomeLivro, abrevLivro):
     topPorCap["ref"] = (
         topPorCap["cap"].astype(str)
         + ":"
@@ -135,23 +128,61 @@ def grafTopSemelhanca(topPorCap, traducNome1 = None, traducNome2 = None, nomeLiv
         data=topPorCap,
         x="ref",
         y="similaridade",
-        color="blue",
+        palette="dark:blue",
         hue="similaridade"
+    )
+
+    plt.grid(
+        axis='y',      # linhas horizontais
+        linestyle='--',# tracejado
+        linewidth=0.8, # espessura
+        alpha=0.5      # transparência
     )
 
     plt.xticks(rotation=45)
 
-    titulo = \
-        f"Versículos Mais Divergentes Entre {traducNome1.upper()} e {traducNome2.upper()} Por Capítulo - Livro: {nomeLivro}" \
-        if (None not in (traducNome1, traducNome2, nomeLivro)) \
-        else "Versículos Mais Divergentes"
+    titulo = f"Versículos Mais Divergentes Entre {traducNome1.upper()} e {traducNome2.upper()} Por Capítulo - Livro: {nomeLivro}"
 
     plt.title(titulo)
     plt.ylabel("Similaridade")
+    plt.xlabel("Versículos")
 
-    nomeFig = f"semelhanPorCap{traducNome1}_{traducNome2}_{abrevLivro}.png" \
-        if None not in (traducNome1, traducNome2, abrevLivro) else "semelhanPorCap.png"
+    nomeFig = f"semelhanca_por_cap_{traducNome1}_{traducNome2}_{abrevLivro}.png"
 
     plt.tight_layout()
-    plt.savefig(nomeFig)
+    plt.savefig("graficos/" + nomeFig)
     plt.show()
+
+    return plt
+
+def grafPlavrExcl(lista, traducNome, nomeLivro, abrevLivro):
+    plt.figure(figsize=(15,6))
+
+    plt.grid(
+        axis='y',      # linhas horizontais
+        linestyle='--',# tracejado
+        linewidth=0.8, # espessura
+        alpha=0.5      # transparência
+    )
+
+    sns.barplot(
+        data=lista,
+        x="palavra",
+        y="quant",
+        color="orange",
+    )
+
+    plt.ylabel("Quantidade de Aparições")
+
+    titulo = f"Palavras Exclusivas da Tradução {traducNome} Que Mais se Repetem - Livro: {nomeLivro}"
+    nomeFig = f"palavras_exclusivas_{traducNome}_{abrevLivro}.png"
+
+    plt.title(titulo)
+    plt.tight_layout()
+    plt.savefig("graficos/" + nomeFig)
+    plt.show()
+
+    return plt
+
+    
+

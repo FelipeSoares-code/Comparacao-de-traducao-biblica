@@ -55,51 +55,68 @@ def main(livroAbrev):
 
     #%%-----------------------------------
     #detectar novas palavras
-    palavrAntigas = set(contPalvrArc) - set(contPalavrNvt) #aparece na ARC e não na NVT
-    palavrNovas = set(contPalavrNvt) - set(contPalvrArc) #aparece na NVT e não na ARC
+    palavrExclArc = fn.topPalavrExcl(
+        listPalvrExcl=(set(contPalvrArc) - set(contPalavrNvt)),
+        livro=livroArc,
+        quantPalavras=10
+    )
+
+    palavrExclNvt = fn.topPalavrExcl(
+        listPalvrExcl=(set(contPalavrNvt) - set(contPalvrArc)),
+        livro=livroNvt,
+        quantPalavras=10
+    )
+    
+    #%%-------------------------------------
+    #buscar nível de semelhança entre versiculos
+    semelhanVers = fn.semelhanTraduc(livroArc, livroNvt)
 
     #%%------------------------------------
     #buscar semelhanças semânticas entre palavras
     # palavrSemelhante = fn.palavrSemelhantes(tokensTotal)
 
     #%%-------------------------------------
-    #buscar nível de semelhança entre versiculos
-    semelhanVers = fn.semelhanTraduc(livroArc, livroNvt)
+    #Criar graficos
+    fg.grafPlavrExcl(palavrExclArc, "ARC", #mostra as n palavras exclusivas que mais aparecem
+                     nomeLivro=livroArc[0]["livro"],
+                     abrevLivro=livroAbrev
+    ) 
+    fg.grafPlavrExcl(palavrExclNvt, "NVT", 
+                     nomeLivro=livroArc[0]["livro"],
+                     abrevLivro=livroAbrev
+    )
 
-    fg.histograma(
+    fg.histograma( #distribuição do nível de semelhança entre os versiculos
         semelhanVers,
         traducNome1=livroArc[0]["traducao"],
         traducNome2=livroNvt[0]["traducao"],
-        abrevLivro=livroArc[0]["abrev"],
+        abrevLivro=livroAbrev,
         nomeLivro=livroArc[0]["livro"]
     )
 
-    #%%-------------------------------------
-    #comparar quantidade média de palavras por versiculo no capítulo
-    fg.grafLinhas(livroArc, livroNvt)
-
-
-    #%%-------------------------------------
-    #buscar versiculos menos e mais semelhantes
-    fg.heatmap(
+    fg.heatmap( #mapa geral dos versiculos mais semelhantes
         lista=semelhanVers,
         traducNome1=livroArc[0]["traducao"],
         traducNome2=livroNvt[0]["traducao"],
-        abrevLivro=livroArc[0]["abrev"],
+        abrevLivro=livroAbrev,
         nomeLivro=livroArc[0]["livro"]
     )
 
-    fg.grafTopSemelhanca(
+    fg.grafTopSemelhanca( #mostra os top n versiculos mais semelhantes de cada capitulo do livro
         fn.topSemelhanPorCap(semelhanVers, 3),
         traducNome1=livroArc[0]["traducao"],
         traducNome2=livroNvt[0]["traducao"],
-        abrevLivro=livroArc[0]["abrev"],
+        abrevLivro=livroAbrev,
         nomeLivro=livroArc[0]["livro"]
     )
 
+    fg.grafLinhas(livroArc, livroNvt)
+
+
+
 # for l in ['mt','mc', 'lc', 'jo']:
 #     main(l)
-
+  
 main('mc')
 
 

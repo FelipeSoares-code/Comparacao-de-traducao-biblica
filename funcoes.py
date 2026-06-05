@@ -86,8 +86,8 @@ def addTokens(livro):
 
 def contPalavras(livro):
     contador = Counter()
-    for l in livro:
-        contador.update(l['tokens'])
+    for v in livro:
+        contador.update(v['tokens'])
     return contador
 
 def palavrSemelhantes(tokens):
@@ -173,3 +173,27 @@ def topSemelhanPorCap(lista, quantPorCap):
     )
 
     return topPorCap
+
+def topPalavrExcl(listPalvrExcl, livro, quantPalavras):
+    dados = []
+    for p in listPalvrExcl:
+        quant_p = 0
+
+        for v in livro:
+            quant_p += v['tokens'].count(p)
+
+        dados.append({
+            "palavra" : p,
+            "quant" : quant_p
+        })
+
+    df = pd.DataFrame(dados)
+
+    topPalavr = (
+        df.sort_values("quant", ascending=False)
+            .head(quantPalavras)
+            .reset_index(drop=True)
+    )
+
+    return topPalavr
+        
