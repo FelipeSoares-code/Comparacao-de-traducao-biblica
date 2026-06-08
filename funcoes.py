@@ -80,7 +80,9 @@ def addTokens(livro):
             "tokens": [
                 token.text
                 for token in doc
-                if not token.is_stop and not token.is_punct #remove artigos, preposições etc
+                if not token.is_stop and not token.is_punct and token.text.strip()
+                #remove artigos, preposições etc
+                #.strip verifica se o teken está vazio
             ]
         })
 
@@ -89,15 +91,6 @@ def contPalavras(livro):
     for v in livro:
         contador.update(v['tokens'])
     return contador
-
-def palavrSemelhantes(tokens):
-    modelo = FastText(
-        sentences=tokens,
-        vector_size=100,
-        window=5,
-        min_count=1
-    )
-    return modelo
 
 def semelhanTraduc(traduc1, traduc2):
     resultados = []
@@ -186,6 +179,8 @@ def topPalavrExcl(listPalvrExcl, livro, quantPalavras):
             "palavra" : p,
             "quant" : quant_p
         })
+
+    if dados == []: return None;
 
     df = pd.DataFrame(dados)
 

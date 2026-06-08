@@ -4,6 +4,7 @@ import funcoes as fn
 import numpy as np
 import pandas as pd
 
+pltShow = False
 
 def histograma(lista, traducNome1, traducNome2, abrevLivro, nomeLivro):
     sim = []
@@ -36,9 +37,10 @@ def histograma(lista, traducNome1, traducNome2, abrevLivro, nomeLivro):
     nomeFig = f"histograma_{traducNome1}_{traducNome2}_{abrevLivro}.png"
 
     plt.savefig("graficos/" + nomeFig)
-    plt.show()
 
-    return plt
+    if pltShow: plt.show();
+
+    plt.close()
 
 def grafLinhas(livro1, livro2):
     if len(livro1) <= 100:
@@ -58,7 +60,7 @@ def grafLinhas(livro1, livro2):
     lenCapitulos = range(1, len(list1) + 1) #pega a quantidade de capitulos pela tamanho do array
     nomeTraduc1 = livro1[0]["traducao"].upper()
     nomeTraduc2 = livro2[0]["traducao"].upper()
-    abrev = livro1[0]["abrev"]
+    abrev = livro1[0]["abrev"].lower()
 
     plt.plot(eixoX, list1, label=nomeTraduc1)
     plt.plot(eixoX, list2, label=nomeTraduc2)
@@ -76,9 +78,9 @@ def grafLinhas(livro1, livro2):
     nomeFig = f"linhas_{nomeTraduc1.lower()}_{nomeTraduc2.lower()}_{abrev}"
 
     plt.savefig("graficos/" + nomeFig)
-    plt.show()
+    if pltShow: plt.show();
 
-    return plt
+    plt.close()
 
 def heatmap(lista, traducNome1, traducNome2, abrevLivro, nomeLivro):
     df = pd.DataFrame(lista)
@@ -111,9 +113,9 @@ def heatmap(lista, traducNome1, traducNome2, abrevLivro, nomeLivro):
     plt.xlabel("Versículo")
     plt.ylabel("Capítulo")
     plt.savefig("graficos/" + nomeFig)
-    plt.show()
+    if pltShow: plt.show();
 
-    return plt
+    plt.close()
 
 def grafTopSemelhanca(topPorCap, traducNome1, traducNome2, nomeLivro, abrevLivro):
     topPorCap["ref"] = (
@@ -151,9 +153,10 @@ def grafTopSemelhanca(topPorCap, traducNome1, traducNome2, nomeLivro, abrevLivro
 
     plt.tight_layout()
     plt.savefig("graficos/" + nomeFig)
-    plt.show()
+    if pltShow: plt.show();
 
-    return plt
+    plt.close()
+
 
 def grafPlavrExcl(lista, traducNome, nomeLivro, abrevLivro):
     plt.figure(figsize=(15,6))
@@ -180,9 +183,11 @@ def grafPlavrExcl(lista, traducNome, nomeLivro, abrevLivro):
     plt.title(titulo)
     plt.tight_layout()
     plt.savefig("graficos/" + nomeFig)
-    plt.show()
+    if pltShow: plt.show();
 
-    return plt
+    plt.close()
+
+    
 
     
 
