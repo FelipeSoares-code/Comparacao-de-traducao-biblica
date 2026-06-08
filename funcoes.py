@@ -5,6 +5,8 @@ from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 import pandas as pd
 
+modeloST = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')
+
 def buscarJsonBiblia(biblia, livro = None, abrev = None, cap = None, vers = None):
     #estrutura do json:
     #"abbrev"[], "chapters"[[...]], "name"[]
@@ -94,25 +96,23 @@ def contPalavras(livro):
 
 def semelhanTraduc(traduc1, traduc2):
     resultados = []
+    modelo = modeloST
 
-    modelo = SentenceTransformer(
-        'paraphrase-multilingual-MiniLM-L12-v2'
-    )
+    textos2 = [v["texto_limpo"] for v in traduc2]
+    embs2 = modelo.encode(textos2)
 
-    emb_traduc2 = {}
+    emb_traduc2 = {
+        (v["cap"], v["vers"]): emb
+        for v, emb in zip(traduc2, embs2)
+    }
 
-    for v2 in traduc2:
-        chave = (v2["cap"], v2["vers"])
+    textos1 = [v["texto_limpo"] for v in traduc1]
+    embs1 = modelo.encode(textos1)
 
-        emb_traduc2[chave] = modelo.encode(
-            v2["texto_limpo"]
-        )
-
-    for v1 in traduc1:
+    for v1, emb1 in zip(traduc1, embs1):
         chave = (v1["cap"], v1["vers"])
 
         if chave in emb_traduc2:
-            emb1 = modelo.encode(v1["texto_limpo"])
             emb2 = emb_traduc2[chave]
 
             sim = cosine_similarity(

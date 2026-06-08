@@ -6,8 +6,8 @@ print("inicio")
 
 #%%----------------------------------
 # Abertura do texto original em json
-traduc1 = "ARC"
-traduc2 = "NVI"
+traduc1 = input("Digite a tradução 1: ")
+traduc2 = input("Digite a tradução 2: ")
 
 print("Abrindo arquivos json...")
 with open(f'traducoes/{traduc1.upper()}.json', 'r', encoding='utf-8') as arquivo:
@@ -15,8 +15,6 @@ with open(f'traducoes/{traduc1.upper()}.json', 'r', encoding='utf-8') as arquivo
 
 with open(f'traducoes/{traduc2.upper()}.json', 'r', encoding='utf-8') as arquivo:
     biblia2 = json.load(arquivo)
-
-tokensTotal = []
 
 def main(livroAbrev):
 #%%-----------------------------------
@@ -30,6 +28,8 @@ def main(livroAbrev):
         biblia=biblia2,
         abrev=livroAbrev
     )
+
+    print(f"----------\nAnalisando o livro: {livro1['name']}...\n")
 
     #%%-----------------------------------
     # Limpeza das palavras e organização dos objetos
@@ -54,13 +54,12 @@ def main(livroAbrev):
 
     #%%-----------------------------------
     #detectar novas palavras
+    print("Buscando palavras exclusivas...")
     palavrExcl_1 = fn.topPalavrExcl(
         listPalvrExcl=(set(contPalvr1) - set(contPalavr2)),
         livro=livro1,
         quantPalavras=10
     )
-
-    print(palavrExcl_1)
 
     palavrExcl_2 = fn.topPalavrExcl(
         listPalvrExcl=(set(contPalavr2) - set(contPalvr1)),
@@ -70,10 +69,12 @@ def main(livroAbrev):
     
     #%%-------------------------------------
     #buscar nível de semelhança entre versiculos
+    print("Analisando nível de semelhança entre os versículos...")
     semelhanVers = fn.semelhanTraduc(livro1, livro2)
 
     #%%-------------------------------------
     #Criar graficos
+    print("Criando gráficos...")
     fg.grafPlavrExcl( #mostra as n palavras exclusivas que mais aparecem
         palavrExcl_1, traduc1.upper(), 
         nomeLivro=livro1[0]["livro"],
@@ -112,9 +113,9 @@ def main(livroAbrev):
     fg.grafLinhas(livro1, livro2)
 
 
-
-for l in ['mt','mc', 'lc', 'jo']:
-    main(l)
+if __name__ == "__main__":
+    for l in ['mt','mc', 'lc', 'jo']:
+        main(l)
   
 
 
