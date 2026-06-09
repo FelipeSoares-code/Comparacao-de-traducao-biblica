@@ -57,7 +57,7 @@ def grafLinhas(livro1, livro2):
 
     plt.figure(figsize=(14,6))
 
-    lenCapitulos = range(1, len(list1) + 1) #pega a quantidade de capitulos pela tamanho do array
+    # lenCapitulos = range(1, len(list1) + 1) #pega a quantidade de capitulos pela tamanho do array
     nomeTraduc1 = livro1[0]["traducao"].upper()
     nomeTraduc2 = livro2[0]["traducao"].upper()
     abrev = livro1[0]["abrev"].lower()
