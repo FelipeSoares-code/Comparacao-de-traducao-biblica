@@ -1,6 +1,8 @@
 import funcoes as fn
 import funcoesGraficos as fg
 import json
+import matplotlib.pyplot as plt
+import streamlit as st
 
 def carregarJson(traduc):
     with open(f'traducoes/{traduc.upper()}.json', 'r', encoding='utf-8') as arquivo:
@@ -68,7 +70,7 @@ def analisarLivros(livro1, livro2):
     return analise
 
 
-def criarGraficos(dados, livro1, livro2, traduc1, traduc2, livroAbrev):
+def criarGraficos(dados, livro1, livro2, traduc1, traduc2, livroAbrev, St = False):
     palavrExcl_1 = dados["palavr_excl_1"]
     palavrExcl_2 = dados["palavr_excl_2"]
 
@@ -81,13 +83,22 @@ def criarGraficos(dados, livro1, livro2, traduc1, traduc2, livroAbrev):
         traducNome=traduc1.upper(), 
         nomeLivro=livro1[0]["livro"],
         abrevLivro=livroAbrev
-    ) 
+    )
+
+    if St: st.pyplot();
+
+    plt.close()
+    
     fg.grafPlavrExcl(
         lista=palavrExcl_2, 
         traducNome=traduc2.upper(), 
         nomeLivro=livro1[0]["livro"],
         abrevLivro=livroAbrev
     )
+
+    if st: St.pyplot();
+
+    plt.close()
 
     fg.histograma( #distribuição do nível de semelhança entre os versiculos
         lista=semelhanVers,
@@ -97,6 +108,10 @@ def criarGraficos(dados, livro1, livro2, traduc1, traduc2, livroAbrev):
         nomeLivro=livro1[0]["livro"]
     )
 
+    if st: St.pyplot();
+
+    plt.close()
+
     fg.heatmap( #mapa geral dos versiculos mais semelhantes
         lista=semelhanVers,
         traducNome1=livro1[0]["traducao"],
@@ -104,6 +119,10 @@ def criarGraficos(dados, livro1, livro2, traduc1, traduc2, livroAbrev):
         abrevLivro=livroAbrev,
         nomeLivro=livro1[0]["livro"]
     )
+
+    if st: St.pyplot();
+
+    plt.close()
 
     fg.grafTopSemelhanca( #mostra os top n versiculos mais semelhantes de cada capitulo do livro
         fn.topSemelhanPorCap(semelhanVers, 3),
@@ -113,4 +132,12 @@ def criarGraficos(dados, livro1, livro2, traduc1, traduc2, livroAbrev):
         nomeLivro=livro1[0]["livro"]
     )
 
+    if st: St.pyplot();
+
+    plt.close()
+
     fg.grafLinhas(livro1, livro2)
+
+    if st: St.pyplot();
+
+    plt.close()

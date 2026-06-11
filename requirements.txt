@@ -1,0 +1,11 @@
+streamlit
+pandas
+numpy
+matplotlib
+seaborn
+sentence_transformers
+spacy
+scikit-learn
+torch
+openpyxl
+gensim

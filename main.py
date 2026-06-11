@@ -1,8 +1,8 @@
 import processamento as pr
 
-livros = ['mt','mc', 'lc', 'jo']
+livros = ['mt']
 
-def main(livroAbrev, traduc1, traduc2, biblia1, biblia2):
+def main(livroAbrev, traduc1, traduc2, biblia1, biblia2, St = False):
     livro1 = pr.organizarLivro(biblia1, livroAbrev, traduc1)
     livro2 = pr.organizarLivro(biblia2, livroAbrev, traduc2)
 
@@ -14,7 +14,8 @@ def main(livroAbrev, traduc1, traduc2, biblia1, biblia2):
         livro2=livro2,
         livroAbrev=livroAbrev,
         traduc1=traduc1,
-        traduc2=traduc2
+        traduc2=traduc2,
+        St=St
     )    
 
 if __name__ == "__main__":
@@ -23,6 +24,9 @@ if __name__ == "__main__":
     # Abertura do texto original em json
     traduc1 = input("Digite a primeira tradução: ").upper()
     traduc2 = input("Digite a segunda tradução: ").upper()
+
+    # traduc1 = "nvi"
+    # traduc2 = "arc"
 
     print("Abrindo arquivos json...")
     biblia1 = pr.carregarJson(traduc1)
