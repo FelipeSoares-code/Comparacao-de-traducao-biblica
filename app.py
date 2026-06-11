@@ -67,7 +67,7 @@ if st.button("Iniciar Análise"):
     elif len(livros_escolhidos) == 0:
         st.error("Escolha pelo menos 1 livro", icon="❌")
     else:
-        with st.spinner("Calculando similaridades..."):
+        with st.spinner("Realizando análise..."):
             sucessoJson = False
             try:
                 biblia1 = pr.carregarJson(traduc1)

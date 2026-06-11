@@ -7,4 +7,5 @@ sentence_transformers
 spacy
 scikit-learn
 torch
+torchvision
 openpyxl

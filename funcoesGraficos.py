@@ -4,7 +4,7 @@ import funcoes as fn
 import numpy as np
 import pandas as pd
 
-saveFig = True
+saveFig = False
 
 def histograma(lista, traducNome1, traducNome2, abrevLivro, nomeLivro):
     sim = []
