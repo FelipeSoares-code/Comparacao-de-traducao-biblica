@@ -1,6 +1,6 @@
 import re, spacy
+from spacy.cli import download
 from collections import Counter
-from gensim.models import FastText
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 import pandas as pd
@@ -73,7 +73,11 @@ def organizarLivro(livro, nomeTraducao):
     return livroLimpo
 
 def addTokens(livro):
-    nlp = spacy.load("pt_core_news_sm")
+    try:
+        nlp = spacy.load("pt_core_news_sm")
+    except:
+        download("pt_core_news_sm")
+        nlp = spacy.load("pt_core_news_sm")
 
     for v in livro:
         doc = nlp(v['texto_limpo'])
