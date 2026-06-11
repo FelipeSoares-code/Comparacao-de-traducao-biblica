@@ -5,16 +5,35 @@ from main import main
 
 PATH_TRADUCOES = Path("traducoes")
 
-livros_nt = [
-    "Mateus", "Marcos", "Lucas", "João",
-    "Atos", "Romanos", "1 Coríntios", "2 Coríntios",
-    "Gálatas", "Efésios", "Filipenses", "Colossenses",
-    "1 Tessalonicenses", "2 Tessalonicenses",
-    "1 Timóteo", "2 Timóteo", "Tito", "Filemom",
-    "Hebreus", "Tiago", "1 Pedro", "2 Pedro",
-    "1 João", "2 João", "3 João", "Judas",
-    "Apocalipse"
-]
+livros_nt = {
+    "Mateus": "mt",
+    "Marcos": "mc",
+    "Lucas": "lc",
+    "João": "jo",
+    "Atos": "at",
+    "Romanos": "rm",
+    "1 Coríntios": "1co",
+    "2 Coríntios": "2co",
+    "Gálatas": "gl",
+    "Efésios": "ef",
+    "Filipenses": "fp",
+    "Colossenses": "cl",
+    "1 Tessalonicenses": "1ts",
+    "2 Tessalonicenses": "2ts",
+    "1 Timóteo": "1tm",
+    "2 Timóteo": "2tm",
+    "Tito": "tt",
+    "Filemom": "fm",
+    "Hebreus": "hb",
+    "Tiago": "tg",
+    "1 Pedro": "1pe",
+    "2 Pedro": "2pe",
+    "1 João": "1jo",
+    "2 João": "2jo",
+    "3 João": "3jo",
+    "Judas": "jd",
+    "Apocalipse": "ap"
+}
 
 traducoes = sorted(
     arquivo.stem
@@ -35,7 +54,7 @@ traduc2 = st.selectbox(
 
 livros_escolhidos = st.multiselect(
     "Selecione os livros para analisar:",
-    livros_nt
+    list(livros_nt.keys())
 )
 
 if len(livros_escolhidos) > 4:
@@ -59,7 +78,8 @@ if st.button("Iniciar Análise"):
 
             if sucessoJson:
                 for livro in livros_escolhidos:
-                    sucesso = main(livro, traduc1, traduc2, biblia1, biblia2, St=True)
+                    abrev = livros_nt[livro]
+                    sucesso = main(abrev, traduc1, traduc2, biblia1, biblia2, St=True)
 
     if sucesso: 
         st.success("Análise concluída")
