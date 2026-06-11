@@ -6,16 +6,25 @@ import streamlit as st
 def main(livroAbrev, traduc1, traduc2, biblia1, biblia2, St = False):
     sucesso = False
     
-    if St: st.chat_message(f"Analisando '{livroAbrev}'")
+    if St:
+        with st.chat_message("assistant"):
+            st.write(f"Analisando '{livroAbrev}'")
 
-    if St: st.chat_message("Organizando livros...")
+    if St:
+        with st.chat_message("assistant"):
+            st.write(f"Organizando livros...")
+
     livro1 = pr.organizarLivro(biblia1, livroAbrev, traduc1)
     livro2 = pr.organizarLivro(biblia2, livroAbrev, traduc2)
 
-    if St: st.chat_message("Analisando livros...")
+    if St:
+        with st.chat_message("assistant"):
+            st.write(f"Analisando livros")
     dadosAnalise = pr.analisarLivros(livro1, livro2)
 
-    if St: st.chat_message("Criando gráficos...")
+    if St:
+        with st.chat_message("assistant"):
+            st.write(f"Criando gráficos")
     pr.criarGraficos(
         dados=dadosAnalise,
         livro1=livro1,
