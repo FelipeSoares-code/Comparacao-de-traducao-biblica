@@ -78,29 +78,29 @@ def criarGraficos(dados, livro1, livro2, traduc1, traduc2, livroAbrev, St = Fals
     #%%-------------------------------------
     #Criar graficos
     print("Criando gráficos...")
-    fg.grafPlavrExcl( #mostra as n palavras exclusivas que mais aparecem
+    fig = fg.grafPlavrExcl( #mostra as n palavras exclusivas que mais aparecem
         lista=palavrExcl_1, 
         traducNome=traduc1.upper(), 
         nomeLivro=livro1[0]["livro"],
         abrevLivro=livroAbrev
     )
 
-    if St: st.pyplot();
+    if St: st.pyplot(fig)
 
     plt.close()
     
-    fg.grafPlavrExcl(
+    fig = fg.grafPlavrExcl(
         lista=palavrExcl_2, 
         traducNome=traduc2.upper(), 
         nomeLivro=livro1[0]["livro"],
         abrevLivro=livroAbrev
     )
 
-    if st: St.pyplot();
+    if St: st.pyplot(fig);
 
     plt.close()
 
-    fg.histograma( #distribuição do nível de semelhança entre os versiculos
+    fig = fg.histograma( #distribuição do nível de semelhança entre os versiculos
         lista=semelhanVers,
         traducNome1=livro1[0]["traducao"],
         traducNome2=livro2[0]["traducao"],
@@ -108,11 +108,11 @@ def criarGraficos(dados, livro1, livro2, traduc1, traduc2, livroAbrev, St = Fals
         nomeLivro=livro1[0]["livro"]
     )
 
-    if st: St.pyplot();
+    if St: st.pyplot(fig)
 
     plt.close()
 
-    fg.heatmap( #mapa geral dos versiculos mais semelhantes
+    fig = fg.heatmap( #mapa geral dos versiculos mais semelhantes
         lista=semelhanVers,
         traducNome1=livro1[0]["traducao"],
         traducNome2=livro2[0]["traducao"],
@@ -120,11 +120,11 @@ def criarGraficos(dados, livro1, livro2, traduc1, traduc2, livroAbrev, St = Fals
         nomeLivro=livro1[0]["livro"]
     )
 
-    if st: St.pyplot();
+    if St: st.pyplot(fig)
 
     plt.close()
 
-    fg.grafTopSemelhanca( #mostra os top n versiculos mais semelhantes de cada capitulo do livro
+    fig = fg.grafTopSemelhanca( #mostra os top n versiculos mais semelhantes de cada capitulo do livro
         fn.topSemelhanPorCap(semelhanVers, 3),
         traducNome1=livro1[0]["traducao"],
         traducNome2=livro2[0]["traducao"],
@@ -132,12 +132,12 @@ def criarGraficos(dados, livro1, livro2, traduc1, traduc2, livroAbrev, St = Fals
         nomeLivro=livro1[0]["livro"]
     )
 
-    if st: St.pyplot();
+    if St: st.pyplot(fig)
 
     plt.close()
 
-    fg.grafLinhas(livro1, livro2)
+    fig = fg.grafLinhas(livro1, livro2)
 
-    if st: St.pyplot();
+    if St: st.pyplot(fig)
 
     plt.close()

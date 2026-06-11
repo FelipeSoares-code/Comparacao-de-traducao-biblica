@@ -5,7 +5,16 @@ from main import main
 
 PATH_TRADUCOES = Path("traducoes")
 
-livros = ['mt']
+livros_nt = [
+    "Mateus", "Marcos", "Lucas", "João",
+    "Atos", "Romanos", "1 Coríntios", "2 Coríntios",
+    "Gálatas", "Efésios", "Filipenses", "Colossenses",
+    "1 Tessalonicenses", "2 Tessalonicenses",
+    "1 Timóteo", "2 Timóteo", "Tito", "Filemom",
+    "Hebreus", "Tiago", "1 Pedro", "2 Pedro",
+    "1 João", "2 João", "3 João", "Judas",
+    "Apocalipse"
+]
 
 traducoes = sorted(
     arquivo.stem
@@ -24,12 +33,33 @@ traduc2 = st.selectbox(
     traducoes
 )
 
+livros_escolhidos = st.multiselect(
+    "Selecione os livros para analisar:",
+    livros_nt
+)
+
+if len(livros_escolhidos) > 4:
+    st.warning("Escolher muitos livros pode fazer a análise demorar muito", icon="⚠️")
+
 if st.button("Iniciar Análise"):
-    with st.spinner("Calculando similaridades..."):
-        biblia1 = pr.carregarJson(traduc1)
-        biblia2 = pr.carregarJson(traduc2)
+    sucesso = False
+    if traduc1 == traduc2:
+        st.error("Você deve escolher duas traduções diferentes", icon="❌")
+    elif len(livros_escolhidos) == 0:
+        st.error("Escolha pelo menos 1 livro", icon="❌")
+    else:
+        with st.spinner("Calculando similaridades..."):
+            sucessoJson = False
+            try:
+                biblia1 = pr.carregarJson(traduc1)
+                biblia2 = pr.carregarJson(traduc2)
+                sucessoJson = True
+            except:
+                st.error("Houve um erro ao carregar os arquivos Json", icon="❌")
 
-        for livro in livros:
-            main(livro, traduc1, traduc2, biblia1, biblia2, St=True)
+            if sucessoJson:
+                for livro in livros_escolhidos:
+                    sucesso = main(livro, traduc1, traduc2, biblia1, biblia2, St=True)
 
-    st.success
+    if sucesso: 
+        st.success("Análise concluída")

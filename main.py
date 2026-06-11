@@ -1,8 +1,8 @@
 import processamento as pr
-
-livros = ['mt']
+from pathlib import Path
 
 def main(livroAbrev, traduc1, traduc2, biblia1, biblia2, St = False):
+    sucesso = False
     livro1 = pr.organizarLivro(biblia1, livroAbrev, traduc1)
     livro2 = pr.organizarLivro(biblia2, livroAbrev, traduc2)
 
@@ -16,23 +16,48 @@ def main(livroAbrev, traduc1, traduc2, biblia1, biblia2, St = False):
         traduc1=traduc1,
         traduc2=traduc2,
         St=St
-    )    
+    )   
+    
+    sucesso = True
+    return sucesso 
 
 if __name__ == "__main__":
     print("Início...")
-    #%%----------------------------------
-    # Abertura do texto original em json
+
+    livros = ['mt', 'mc', 'lc', 'jo']
+
+    PATH_TRADUCOES = Path("traducoes")
+    traducoes = sorted(
+        arquivo.stem
+        for arquivo in PATH_TRADUCOES.glob("*.json")
+    )
+
+    print("Traduções disponíveis:", [t for t in traducoes])
     traduc1 = input("Digite a primeira tradução: ").upper()
     traduc2 = input("Digite a segunda tradução: ").upper()
 
-    # traduc1 = "nvi"
-    # traduc2 = "arc"
+    while traduc1 == traduc2:
+        print("Você deve escolher duas traduções diferentes...")
+        traduc1 = input("Digite a primeira tradução: ").upper()
+        traduc2 = input("Digite a segunda tradução: ").upper()
 
-    print("Abrindo arquivos json...")
-    biblia1 = pr.carregarJson(traduc1)
-    biblia2 = pr.carregarJson(traduc2)
-    for livro in livros:
-        main(livro, traduc1, traduc2, biblia1, biblia2)
+    while traduc1 not in traducoes or traduc2 not in traducoes:
+        print("Uma ou mais traduções digitadas não estão disponíveis...")
+        traduc1 = input("Digite a primeira tradução: ").upper()
+        traduc2 = input("Digite a segunda tradução: ").upper()
+
+    sucessoJson = False
+    try:
+        print("Abrindo arquivos json...")
+        biblia1 = pr.carregarJson(traduc1)
+        biblia2 = pr.carregarJson(traduc2)
+        sucessoJson = True
+    except:
+        print("Houve um erro ao abrir o arquivo Json...")
+
+    if sucessoJson:
+        for livro in livros:
+            main(livro, traduc1, traduc2, biblia1, biblia2)
   
 
 
