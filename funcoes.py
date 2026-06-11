@@ -73,11 +73,7 @@ def organizarLivro(livro, nomeTraducao):
     return livroLimpo
 
 def addTokens(livro):
-    try:
-        nlp = spacy.load("pt_core_news_sm")
-    except:
-        download("pt_core_news_sm")
-        nlp = spacy.load("pt_core_news_sm")
+    nlp = spacy.load("pt_core_news_sm")
 
     for v in livro:
         doc = nlp(v['texto_limpo'])
