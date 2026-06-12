@@ -3,6 +3,7 @@ import funcoesGraficos as fg
 import json
 import matplotlib.pyplot as plt
 import streamlit as st
+import time
 
 def carregarJson(traduc):
     with open(f'traducoes/{traduc.upper()}.json', 'r', encoding='utf-8') as arquivo:
@@ -18,7 +19,7 @@ def organizarLivro(biblia, livroAbrev, traduc):
 
     if livro == None:
         print("erro ao encontrar livro")
-        st.error("Erro ao encontar livro pela abreviação:", livroAbrev)
+        st.error(f"Erro ao encontar livro pela abreviação: {livroAbrev}")
         return
 
     print(f"----------\nAnalisando o livro: {livro['name']}...\n")
@@ -75,7 +76,7 @@ def analisarLivros(livro1, livro2, traduc1, traduc2, St = False):
     }
 
     if St:
-        chatSt(analise)
+        chatSt(analise, livro1, livro2)
 
     return analise
 
@@ -154,33 +155,52 @@ def criarGraficos(dados, livro1, livro2, livroAbrev, St = False):
 
     plt.close()
 
-def chatSt(dados):
+def chatSt(dados, livro1, livro2):
     palavrExcl_1 = dados["palavr_excl_1"]
     palavrExcl_2 = dados["palavr_excl_2"]
     traduc1 = dados["traduc1"]
     traduc2 = dados["traduc2"]
-
     semelhanVers = dados["semelhanca_vers"]
+    livroNome = livro1[0]['livro']
 
-    texto = "\n".join(
-        f"• {linha['palavra']} ({linha['quant']} ocorrência{'s' if linha['quant'] > 1 else ''})\n"
-        for _, linha in palavrExcl_1.iterrows()
-    )
-    st.chat_message("assistant").write(
-        f"As 10 palavras exclusivas da tradução **{traduc1}** que aparecem com maior frequência são:\n\n{texto}"
-    )
-    texto = "\n".join(
-        f"• {linha['palavra']} ({linha['quant']} ocorrência{'s' if linha['quant'] > 1 else ''})\n"
-        for _, linha in palavrExcl_2.iterrows()
-    )
-    st.chat_message("assistant").write(
-        f"As 10 palavras exclusivas da tradução **{traduc2}** que aparecem com maior frequência são:\n\n{texto}"
-    )
+    def palavrExcl(traduc, list):
+        texto = "\n".join(
+            f"• {linha['palavra']} ({linha['quant']} ocorrência{'s' if linha['quant'] > 1 else ''})\n"
+            for _, linha in list.iterrows()
+        )
+        st.chat_message("assistant").write(
+            f"As 10 palavras exclusivas da tradução **{traduc}** que aparecem com maior frequência são:\n\n{texto}"
+        )
+        time.sleep(2)
+    
+    palavrExcl(traduc1, palavrExcl_1)
+    palavrExcl(traduc2, palavrExcl_2)
 
     media = sum(v["similaridade"] for v in semelhanVers) / len(semelhanVers)
-
     st.chat_message("assistant").write(
         f"Considerando todos os versículos analisados, as traduções "
         f"**{traduc1}** e **{traduc2}** apresentam uma similaridade média "
         f"de **{media:.1%}**."
     )
+    time.sleep(2)
+
+    versMin = fn.topSemelhanPorCap(semelhanVers, 1).min()
+    for v in livro1:
+        if v['cap'] == versMin['cap'] and v['vers'] == versMin['vers']:
+            texto1 = v['texto']
+            ref = v['id']
+    for v in livro2:
+        if v['cap'] == versMin['cap'] and v['vers'] == versMin['vers']:
+            texto2 = v['texto']
+
+    st.chat_message('assistant').write(
+        f"O versículo mais divergênte de **{livroNome}** entre as traduções **{traduc1}** e **{traduc2}** "
+        f"é **{ref}**\n\n"
+        f"{traduc1}: {texto1}\n\n"
+        f"{traduc2}: {texto2}\n\n"
+        f"com a similaridade de {versMin['similaridade'] * 100:.2f}%"
+    )
+    time.sleep(2)
+
+
+

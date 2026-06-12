@@ -7,9 +7,8 @@ def main(livroAbrev, traduc1, traduc2, biblia1, biblia2, St = False):
     sucesso = False
     
     if St:
-        with st.chat_message("assistant"):
-            st.write(f"Analisando '{livroAbrev.upper()}'")
-            st.write("Organizando livros...")
+        st.chat_message("assistant").write(f"Analisando '{livroAbrev.capitalize()}'")
+        st.chat_message("assistant").write("Organizando livros...")
     livro1 = pr.organizarLivro(biblia1, livroAbrev, traduc1)
     livro2 = pr.organizarLivro(biblia2, livroAbrev, traduc2)
 

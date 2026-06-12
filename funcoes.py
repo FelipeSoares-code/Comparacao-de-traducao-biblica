@@ -29,6 +29,7 @@ def buscarJsonBiblia(biblia, livro = None, abrev = None, cap = None, vers = None
         abrev = abrev.lower()
 
     for l in biblia:
+        l["abbrev"] = corrigirJson(livroAbrev=l["abbrev"])
         if l["name"].lower() == livro or l["abbrev"].lower() == abrev:
             Livro = l
             break
@@ -56,8 +57,8 @@ def organizarLivro(livro, nomeTraducao):
     livroLimpo = []
     for i, cap in enumerate(livro["chapters"], start=1):
         for j, vers in enumerate(cap, start=1):
-            if isinstance(vers, list): #para caso o versiculo seja uma list
-                vers = " ".join(vers)
+            vers = corrigirJson(vers=vers)
+
             versLimpo = {
                 "id": f'{livro["name"]} {i}:{j}',
                 "traducao": nomeTraducao.lower(),
@@ -191,4 +192,19 @@ def topPalavrExcl(listPalvrExcl, livro, quantPalavras):
     )
 
     return topPalavr
+
+def corrigirJson(livroAbrev=None, vers=None):
+    if livroAbrev is not None:
+        if livroAbrev.lower() == '1tn':
+            return '1Tm'
+        return livroAbrev
+
+    if vers is not None:
+        if isinstance(vers, list):
+            return " ".join(vers)
+        return vers
+
+    return None
+    
+
         
