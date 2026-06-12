@@ -4,6 +4,9 @@
 
 Este projeto em Python oferece uma **plataforma interativa para análise estatística e comparativa de diversas traduções bíblicas**. Com foco em identificar padrões de linguagem, palavras exclusivas e o nível de similaridade semântica entre versículos, o projeto fornece insights aprofundados sobre as nuances de cada versão. Inicialmente focado na **Almeida Revista e Corrigida (ARC)** e na **Nova Versão Transformadora (NVT)**, o sistema agora suporta uma gama expandida de traduções, permitindo aos usuários comparar qualquer par disponível. Além de seu valor analítico, o projeto serve como um excelente portfólio para demonstrar habilidades em **manipulação de dados, processamento de linguagem natural (PLN), visualização de dados e desenvolvimento de interfaces gráficas (GUI) com Streamlit**.
 
+<img width="752" height="547" alt="image" src="https://github.com/user-attachments/assets/42132e5a-f4f2-4aac-8554-b860bb03f1ab" />
+
+
 ## Funcionalidades
 
 O projeto oferece as seguintes funcionalidades aprimoradas:
@@ -27,6 +30,9 @@ O projeto oferece as seguintes funcionalidades aprimoradas:
 *   **Pandas:** Para manipulação e análise de dados estruturados.
 *   **Matplotlib:** Para criação de gráficos estáticos.
 *   **Seaborn:** Para visualizações estatísticas aprimoradas.
+
+<img width="672" height="560" alt="image" src="https://github.com/user-attachments/assets/55d94489-e0a3-40a5-96b0-54bc74f2c17c" />
+
 
 ## Estrutura do Projeto
 
@@ -110,6 +116,9 @@ O projeto gera os seguintes tipos de gráficos para cada par de traduções e li
 *   **Heatmap de Divergência:** Um mapa de calor que visualiza a similaridade entre versículos por capítulo, destacando áreas de maior ou menor concordância.
 *   **Gráfico de Barras (Versículos Mais Divergentes):** Apresenta os versículos com menor similaridade por capítulo, indicando pontos de maior diferença entre as traduções.
 *   **Gráfico de Barras (Palavras Exclusivas):** Exibe as palavras mais frequentes e exclusivas de cada tradução, revelando seu vocabulário característico.
+
+<img width="593" height="578" alt="image" src="https://github.com/user-attachments/assets/7484b46b-2772-46c1-bc77-bc1977f121c5" />
+
 
 ## Próximos Passos e Roadmap
 
