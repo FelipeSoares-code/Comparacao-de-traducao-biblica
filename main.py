@@ -8,30 +8,25 @@ def main(livroAbrev, traduc1, traduc2, biblia1, biblia2, St = False):
     
     if St:
         with st.chat_message("assistant"):
-            st.write(f"Analisando '{livroAbrev}'")
-
-    if St:
-        with st.chat_message("assistant"):
-            st.write(f"Organizando livros...")
-
+            st.write(f"Analisando '{livroAbrev.upper()}'")
+            st.write("Organizando livros...")
     livro1 = pr.organizarLivro(biblia1, livroAbrev, traduc1)
     livro2 = pr.organizarLivro(biblia2, livroAbrev, traduc2)
 
     if St:
         with st.chat_message("assistant"):
-            st.write(f"Analisando livros")
-    dadosAnalise = pr.analisarLivros(livro1, livro2)
+            st.write("Analisando traduções...")
+    dadosAnalise = pr.analisarLivros(livro1, livro2, traduc1, traduc2, St= St)
 
     if St:
         with st.chat_message("assistant"):
-            st.write(f"Criando gráficos")
+            st.write("Criando gráficos...")
+
     pr.criarGraficos(
         dados=dadosAnalise,
         livro1=livro1,
         livro2=livro2,
         livroAbrev=livroAbrev,
-        traduc1=traduc1,
-        traduc2=traduc2,
         St=St
     )   
     
@@ -74,9 +69,11 @@ if __name__ == "__main__":
     except:
         print("Houve um erro ao abrir o arquivo Json...")
 
-    if sucessoJson:
-        for livro in livros:
-            main(livro, traduc1, traduc2, biblia1, biblia2)
+    print(l for l in biblia1["livro"])
+
+    # if sucessoJson:
+    #     for livro in livros:
+    #         main(livro, traduc1, traduc2, biblia1, biblia2)
   
 
 
