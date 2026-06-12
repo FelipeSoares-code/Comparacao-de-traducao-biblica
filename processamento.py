@@ -184,7 +184,8 @@ def chatSt(dados, livro1, livro2):
     )
     time.sleep(2)
 
-    versMin = fn.topSemelhanPorCap(semelhanVers, 1).min()
+    versMin = fn.topSemelhanPorCap(semelhanVers, 1)
+    versMin = versMin.loc[versMin["similaridade"].idxmin()]
     for v in livro1:
         if v['cap'] == versMin['cap'] and v['vers'] == versMin['vers']:
             texto1 = v['texto']
