@@ -2,9 +2,12 @@ import processamento as pr
 from pathlib import Path
 import funcoesGraficos as fg
 import streamlit as st
+import funcoes as fn
 
 def main(livroAbrev, traduc1, traduc2, biblia1, biblia2, St = False):
     sucesso = False
+
+    print(f"-----------\nIniciando análise de: '{livroAbrev.capitalize()}'\n")
     
     if St:
         st.chat_message("assistant").write(f"Analisando '{livroAbrev.capitalize()}'")
@@ -12,14 +15,13 @@ def main(livroAbrev, traduc1, traduc2, biblia1, biblia2, St = False):
     livro1 = pr.organizarLivro(biblia1, livroAbrev, traduc1)
     livro2 = pr.organizarLivro(biblia2, livroAbrev, traduc2)
 
-    if St:
-        with st.chat_message("assistant"):
-            st.write("Analisando traduções...")
+    print("Analisando traduções...")
+    if St: st.chat_message("assistant").write("Analisando traduções...")
+
     dadosAnalise = pr.analisarLivros(livro1, livro2, traduc1, traduc2, St= St)
 
-    if St:
-        with st.chat_message("assistant"):
-            st.write("Criando gráficos...")
+    print("Criando gráficos...")
+    if St: st.chat_message("assistant").write("Criando gráficos...")
 
     pr.criarGraficos(
         dados=dadosAnalise,
@@ -37,7 +39,8 @@ if __name__ == "__main__":
 
     fg.saveFig = True
 
-    livros = ['mt', 'mc', 'lc', 'jo']
+    # Lista de todos os livros do Novo Testamento (abreviações comuns em português)
+    livros = ['mt','mc','lc','jo']
 
     PATH_TRADUCOES = Path("traducoes")
     traducoes = sorted(
@@ -68,11 +71,9 @@ if __name__ == "__main__":
     except:
         print("Houve um erro ao abrir o arquivo Json...")
 
-    print(l for l in biblia1["livro"])
-
-    # if sucessoJson:
-    #     for livro in livros:
-    #         main(livro, traduc1, traduc2, biblia1, biblia2)
+    if sucessoJson:
+        for livro in livros:
+            main(livro, traduc1, traduc2, biblia1, biblia2)
   
 
 

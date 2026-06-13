@@ -22,16 +22,12 @@ def organizarLivro(biblia, livroAbrev, traduc):
         st.error(f"Erro ao encontar livro pela abreviação: {livroAbrev}")
         return
 
-    print(f"----------\nAnalisando o livro: {livro['name']}...\n")
-
     #%%-----------------------------------
     # Limpeza das palavras e organização dos objetos
-    print("Organizando livro...")
     livro = fn.organizarLivro(livro, traduc)
 
     #%%-----------------------------------
     #tokenização
-    print("Separando palavras...")
     fn.addTokens(livro)
 
     fn.addQuantPalavr(livro)
@@ -75,7 +71,7 @@ def analisarLivros(livro1, livro2, traduc1, traduc2, St = False):
         "traduc2": traduc2
     }
 
-    if St:
+    if True:
         chatSt(analise, livro1, livro2)
 
     return analise
@@ -90,7 +86,6 @@ def criarGraficos(dados, livro1, livro2, livroAbrev, St = False):
     semelhanVers = dados["semelhanca_vers"]
     #%%-------------------------------------
     #Criar graficos
-    print("Criando gráficos...")
     fig = fg.grafPlavrExcl( #mostra as n palavras exclusivas que mais aparecem
         lista=palavrExcl_1, 
         traducNome=traduc1.upper(), 
@@ -164,24 +159,26 @@ def chatSt(dados, livro1, livro2):
     livroNome = livro1[0]['livro']
 
     def palavrExcl(traduc, list):
-        texto = "\n".join(
+        lista = "\n".join(
             f"• {linha['palavra']} ({linha['quant']} ocorrência{'s' if linha['quant'] > 1 else ''})\n"
             for _, linha in list.iterrows()
         )
-        st.chat_message("assistant").write(
-            f"As 10 palavras exclusivas da tradução **{traduc}** que aparecem com maior frequência são:\n\n{texto}"
-        )
+        texto = f"As 10 palavras exclusivas da tradução **{traduc}** que aparecem com maior frequência são:\n\n{lista}"
+        st.chat_message("assistant").write(texto)
         time.sleep(2)
+        print(texto)
     
     palavrExcl(traduc1, palavrExcl_1)
     palavrExcl(traduc2, palavrExcl_2)
 
     media = sum(v["similaridade"] for v in semelhanVers) / len(semelhanVers)
-    st.chat_message("assistant").write(
+    texto = (
         f"Considerando todos os versículos analisados, as traduções "
         f"**{traduc1}** e **{traduc2}** apresentam uma similaridade média "
         f"de **{media:.1%}**."
     )
+    st.chat_message("assistant").write(texto)
+    print(texto)
     time.sleep(2)
 
     versMin = fn.topSemelhanPorCap(semelhanVers, 1)
@@ -194,13 +191,15 @@ def chatSt(dados, livro1, livro2):
         if v['cap'] == versMin['cap'] and v['vers'] == versMin['vers']:
             texto2 = v['texto']
 
-    st.chat_message('assistant').write(
+    texto = (
         f"O versículo mais divergênte de **{livroNome}** entre as traduções **{traduc1}** e **{traduc2}** "
         f"é **{ref}**\n\n"
         f"{traduc1}: {texto1}\n\n"
         f"{traduc2}: {texto2}\n\n"
         f"com a similaridade de {versMin['similaridade'] * 100:.2f}%"
     )
+    st.chat_message('assistant').write(texto)
+    print(texto)
     time.sleep(2)
 
 

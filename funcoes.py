@@ -95,37 +95,46 @@ def contPalavras(livro):
         contador.update(v['tokens'])
     return contador
 
-def semelhanTraduc(traduc1, traduc2):
+def semelhanTraduc(livro1, livro2):
     resultados = []
     modelo = modeloST
 
-    textos2 = [v["texto_limpo"] for v in traduc2]
+    textos2 = [v["texto_limpo"] for v in livro2]
     embs2 = modelo.encode(textos2)
 
     emb_traduc2 = {
         (v["cap"], v["vers"]): emb
-        for v, emb in zip(traduc2, embs2)
+        for v, emb in zip(livro2, embs2)
     }
 
-    textos1 = [v["texto_limpo"] for v in traduc1]
+    textos1 = [v["texto_limpo"] for v in livro1]
     embs1 = modelo.encode(textos1)
 
-    for v1, emb1 in zip(traduc1, embs1):
+    for v1, emb1 in zip(livro1, embs1):
         chave = (v1["cap"], v1["vers"])
 
-        if chave in emb_traduc2:
-            emb2 = emb_traduc2[chave]
+        if chave not in emb_traduc2:
+            continue
+        
+        emb2 = emb_traduc2[chave]
 
-            sim = cosine_similarity(
-                [emb1],
-                [emb2]
-            )[0][0]
+        # se houver um texto invalido, não adiciona na análise
+        prox = False
+        if v1["texto_limpo"] == "verszeile ohne text": continue
+        for txt in livro2:
+            if txt["id"] == v1["id"]:
+                if txt["texto_limpo"] == "verszeile ohne text": 
+                    prox = True
+                    break
+        if prox: continue
 
-            resultados.append({
-                "cap": v1["cap"],
-                "vers": v1["vers"],
-                "similaridade": float(sim)
-            })
+        sim = cosine_similarity([emb1], [emb2])[0][0]
+
+        resultados.append({
+            "cap": v1["cap"],
+            "vers": v1["vers"],
+            "similaridade": float(sim)
+        })
 
     return resultados
 
