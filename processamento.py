@@ -86,69 +86,93 @@ def criarGraficos(dados, livro1, livro2, livroAbrev, St = False):
     semelhanVers = dados["semelhanca_vers"]
     #%%-------------------------------------
     #Criar graficos
-    fig = fg.grafPlavrExcl( #mostra as n palavras exclusivas que mais aparecem
-        lista=palavrExcl_1, 
-        traducNome=traduc1.upper(), 
-        nomeLivro=livro1[0]["livro"],
-        abrevLivro=livroAbrev
-    )
+    try:
+        fig = fg.grafPlavrExcl( #mostra as n palavras exclusivas que mais aparecem
+            lista=palavrExcl_1, 
+            traducNome=traduc1.upper(), 
+            nomeLivro=livro1[0]["livro"],
+            abrevLivro=livroAbrev
+        )
 
-    if St: st.pyplot(fig)
-
-    plt.close()
+        if St: st.pyplot(fig)
+    except Exception as e:
+        print(f"Erro ao criar gráfico de palavras exclusivas ({traduc1}): {e}")
+        if St: st.error(f"Erro ao criar gráfico de palavras exclusivas ({traduc1}): {e}")
+    finally:
+        plt.close()
     
-    fig = fg.grafPlavrExcl(
-        lista=palavrExcl_2, 
-        traducNome=traduc2.upper(), 
-        nomeLivro=livro1[0]["livro"],
-        abrevLivro=livroAbrev
-    )
+    try:
+        fig = fg.grafPlavrExcl(
+            lista=palavrExcl_2, 
+            traducNome=traduc2.upper(), 
+            nomeLivro=livro1[0]["livro"],
+            abrevLivro=livroAbrev
+        )
 
-    if St: st.pyplot(fig);
+        if St: st.pyplot(fig)
+    except Exception as e:
+        print(f"Erro ao criar gráfico de palavras exclusivas ({traduc2}): {e}")
+        if St: st.error(f"Erro ao criar gráfico de palavras exclusivas ({traduc2}): {e}")
+    finally:
+        plt.close()
 
-    plt.close()
+    try:
+        fig = fg.histograma( #distribuição do nível de semelhança entre os versiculos
+            lista=semelhanVers,
+            traducNome1=livro1[0]["traducao"],
+            traducNome2=livro2[0]["traducao"],
+            abrevLivro=livroAbrev,
+            nomeLivro=livro1[0]["livro"]
+        )
 
-    fig = fg.histograma( #distribuição do nível de semelhança entre os versiculos
-        lista=semelhanVers,
-        traducNome1=livro1[0]["traducao"],
-        traducNome2=livro2[0]["traducao"],
-        abrevLivro=livroAbrev,
-        nomeLivro=livro1[0]["livro"]
-    )
+        if St: st.pyplot(fig)
+    except Exception as e:
+        print(f"Erro ao criar histograma: {e}")
+        if St: st.error(f"Erro ao criar histograma: {e}")
+    finally:
+        plt.close()
 
-    if St: st.pyplot(fig)
+    try:
+        fig = fg.heatmap( #mapa geral dos versiculos mais semelhantes
+            lista=semelhanVers,
+            traducNome1=livro1[0]["traducao"],
+            traducNome2=livro2[0]["traducao"],
+            abrevLivro=livroAbrev,
+            nomeLivro=livro1[0]["livro"]
+        )
 
-    plt.close()
+        if St: st.pyplot(fig)
+    except Exception as e:
+        print(f"Erro ao criar heatmap: {e}")
+        if St: st.error(f"Erro ao criar heatmap: {e}")
+    finally:
+        plt.close()
 
-    fig = fg.heatmap( #mapa geral dos versiculos mais semelhantes
-        lista=semelhanVers,
-        traducNome1=livro1[0]["traducao"],
-        traducNome2=livro2[0]["traducao"],
-        abrevLivro=livroAbrev,
-        nomeLivro=livro1[0]["livro"]
-    )
+    try:
+        fig = fg.grafTopSemelhanca( #mostra os top n versiculos mais semelhantes de cada capitulo do livro
+            fn.topSemelhanPorCap(semelhanVers, 3),
+            traducNome1=livro1[0]["traducao"],
+            traducNome2=livro2[0]["traducao"],
+            abrevLivro=livroAbrev,
+            nomeLivro=livro1[0]["livro"]
+        )
 
-    if St: st.pyplot(fig)
+        if St: st.pyplot(fig)
+    except Exception as e:
+        print(f"Erro ao criar gráfico de top de semelhança: {e}")
+        if St: st.error(f"Erro ao criar gráfico de top de semelhança: {e}")
+    finally:
+        plt.close()
 
-    plt.close()
+    try:
+        fig = fg.grafLinhas(livro1, livro2)
 
-    fig = fg.grafTopSemelhanca( #mostra os top n versiculos mais semelhantes de cada capitulo do livro
-        fn.topSemelhanPorCap(semelhanVers, 3),
-        traducNome1=livro1[0]["traducao"],
-        traducNome2=livro2[0]["traducao"],
-        abrevLivro=livroAbrev,
-        nomeLivro=livro1[0]["livro"]
-    )
-
-    if St: st.pyplot(fig)
-
-    plt.close()
-
-    fig = fg.grafLinhas(livro1, livro2)
-
-    if St: st.pyplot(fig)
-
-    plt.close()
+        if St: st.pyplot(fig)
+    except Exception as e:
+        print(f"Erro ao criar gráfico de linhas: {e}")
+        if St: st.error(f"Erro ao criar gráfico de linhas: {e}")
+    finally:
+        plt.close()
 
 def chatSt(dados, livro1, livro2):
     palavrExcl_1 = dados["palavr_excl_1"]

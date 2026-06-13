@@ -12,13 +12,23 @@ def main(livroAbrev, traduc1, traduc2, biblia1, biblia2, St = False):
     if St:
         st.chat_message("assistant").write(f"Analisando '{livroAbrev.capitalize()}'")
         st.chat_message("assistant").write("Organizando livros...")
-    livro1 = pr.organizarLivro(biblia1, livroAbrev, traduc1)
-    livro2 = pr.organizarLivro(biblia2, livroAbrev, traduc2)
+    try:
+        livro1 = pr.organizarLivro(biblia1, livroAbrev, traduc1)
+        livro2 = pr.organizarLivro(biblia2, livroAbrev, traduc2)
+    except:
+        print("Erro ao organizar livros")
+        if St: st.chat_message("assistant").error("Erro ao organizar livros", icon="❌")
+        return
 
     print("Analisando traduções...")
     if St: st.chat_message("assistant").write("Analisando traduções...")
 
-    dadosAnalise = pr.analisarLivros(livro1, livro2, traduc1, traduc2, St= St)
+    try:
+        dadosAnalise = pr.analisarLivros(livro1, livro2, traduc1, traduc2, St= St)
+    except:
+        print("Erro ao analisar dados")
+        if St: st.chat_message("assistant").error("Erro ao analisar dados", icon="❌")
+        return
 
     print("Criando gráficos...")
     if St: st.chat_message("assistant").write("Criando gráficos...")
@@ -29,7 +39,7 @@ def main(livroAbrev, traduc1, traduc2, biblia1, biblia2, St = False):
         livro2=livro2,
         livroAbrev=livroAbrev,
         St=St
-    )   
+    ) 
     
     sucesso = True
     return sucesso 
